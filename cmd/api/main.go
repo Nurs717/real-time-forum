@@ -11,9 +11,6 @@ import (
 
 func main() {
 	srv := new(server.Server)
-	if err := srv.Run(config.PORT, handler.Router()); err != nil {
-		log.Fatalf("error occured while running http server: %s", err.Error())
-	}
 	db, err := repository.ConnectDB()
 	if err != nil {
 		log.Fatalf("failed to initialize db: %s", err.Error())
@@ -24,4 +21,8 @@ func main() {
 		Repo: repo,
 	}
 	useCases := usecase.NewUseCases(deps)
+	handlers := handler.NewHandler(useCases)
+	if err := srv.Run(config.PORT, handlers.Router()); err != nil {
+		log.Fatalf("error occured while running http server: %s", err.Error())
+	}
 }
