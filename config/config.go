@@ -1,6 +1,7 @@
 package config
 
 const (
-	PORT     = "8080"
-	DATABASE = "rtforum.db"
+	API_PORT    = "8080"
+	CLIENT_PORT = ":8081"
+	DATABASE    = "rtforum.db"
 )

@@ -2,12 +2,15 @@ package repository
 
 import (
 	"database/sql"
+	"rtforum/internal/entity"
 )
 
 type Users interface {
 }
 
 type Post interface {
+	Save(post *entity.Post) (*entity.Post, error)
+	FindAll() ([]entity.Post, error)
 }
 
 type Comment interface {

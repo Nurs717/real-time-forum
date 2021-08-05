@@ -13,13 +13,13 @@ inputForm.addEventListener("submit", (e) => {
     fetch(url, {
 
         method: "POST",
-        body: JSON.stringify({ message: formdata.get("message") }),
+        body: JSON.stringify({ post: formdata.get("post") }),
     }).then(
         response => response.text()
     ).then(
         (data) => {
             console.log(data);
-            document.getElementById("serverMessageBox").innerHTML = data
+            document.getElementById("serverPostBox").innerHTML = data
         }
     ).catch(
         error => console.error(error)

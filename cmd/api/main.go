@@ -22,7 +22,7 @@ func main() {
 	}
 	useCases := usecase.NewUseCases(deps)
 	handlers := handler.NewHandler(useCases)
-	if err := srv.Run(config.PORT, handlers.Router()); err != nil {
+	if err := srv.Run(config.API_PORT, handlers.Router()); err != nil {
 		log.Fatalf("error occured while running http server: %s", err.Error())
 	}
 }

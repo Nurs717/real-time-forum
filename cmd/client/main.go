@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"rtforum/config"
 	"text/template"
 )
 
@@ -20,7 +21,7 @@ func main() {
 	http.Handle("/web/js/", http.StripPrefix("/web/js/", js))
 	http.Handle("/web/css/", http.StripPrefix("/web/css/", css))
 	http.HandleFunc("/", indexHandler)
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	log.Fatal(http.ListenAndServe(config.CLIENT_PORT, nil))
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {

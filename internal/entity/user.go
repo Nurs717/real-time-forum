@@ -1,6 +1,10 @@
 package entity
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"rtforum/errors"
+
+	"golang.org/x/crypto/bcrypt"
+)
 
 // User data
 type User struct {
@@ -37,7 +41,7 @@ func NewUser(email, password, firstName, lastName string) (*User, error) {
 // Validate validates data
 func (u *User) Validate() error {
 	if u.Email == "" || u.Password == "" || u.FirstName == "" || u.LastName == "" {
-		return ErrInvalidEntity
+		return errors.ErrInvalidEntity
 	}
 	return nil
 }

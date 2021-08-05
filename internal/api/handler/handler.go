@@ -2,8 +2,8 @@ package handler
 
 import "rtforum/internal/usecase"
 
-type Message struct {
-	Message string `json:"message"`
+type Post struct {
+	Post string `json:"post"`
 }
 
 type Handler struct {

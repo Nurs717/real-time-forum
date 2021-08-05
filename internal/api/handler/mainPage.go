@@ -22,18 +22,18 @@ func (h *Handler) MainPage() http.HandlerFunc {
 			}
 			http.ServeFile(w, r, path)
 		case "POST":
-			var message Message
+			var post Post
 			data, err := ioutil.ReadAll(r.Body)
 			defer r.Body.Close()
 			if err != nil {
 				log.Printf("error reading body %v\n", err)
 			}
-			err = json.Unmarshal(data, &message)
+			err = json.Unmarshal(data, &post)
 			if err != nil {
 				log.Printf("error unmarshaling %v\n", err)
 			}
-			fmt.Println("message from client:", message.Message)
-			fmt.Fprintf(w, "Server: %s\n", message.Message+" | "+time.Now().Format(time.RFC3339))
+			fmt.Println("post from client:", post.Post)
+			fmt.Fprintf(w, "Server: %s\n", post.Post+" | "+time.Now().Format(time.RFC3339))
 		}
 	}
 }
