@@ -1,6 +1,6 @@
 package entity
 
 type Post struct {
-	ID   int    `json: id`
+	ID   int
 	Post string `json:"post"`
 }

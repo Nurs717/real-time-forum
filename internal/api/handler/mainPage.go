@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"rtforum/internal/usecase"
+	"rtforum/internal/entity"
 	"time"
 )
 
@@ -23,7 +23,7 @@ func (h *Handler) MainPage() http.HandlerFunc {
 			}
 			http.ServeFile(w, r, path)
 		case "POST":
-			var post Post
+			var post *entity.Post
 			data, err := ioutil.ReadAll(r.Body)
 			defer r.Body.Close()
 			if err != nil {
@@ -33,11 +33,11 @@ func (h *Handler) MainPage() http.HandlerFunc {
 			if err != nil {
 				log.Printf("error unmarshaling %v\n", err)
 			}
-			err = usecase.AddIDPost(&post)
+			err = h.UseCases.Post.Create(post)
 			if err != nil {
 				log.Fatalf("error adding ID to post %v\n", err)
 			}
-			fmt.Println("post from client:", post.Post)
+			fmt.Println("post from client:", post.Post, post.ID)
 			fmt.Fprintf(w, "Server: %s\n", post.Post+" | "+time.Now().Format(time.RFC3339))
 		}
 	}

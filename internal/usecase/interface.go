@@ -8,16 +8,10 @@ import (
 type Users interface {
 }
 
-type Post struct {
-	ID   int
-	Post string
-}
-
-type Posts interface {
+type Post interface {
 	Validate(post *entity.Post) error
-	Create(post *entity.Post) (*entity.Post, error)
-	FindAll() []entity.Post
-	AddIDPost(post *repository.Post) error
+	Create(post *entity.Post) error
+	FindAll() ([]entity.Post, error)
 }
 
 type Comments interface {
@@ -25,7 +19,7 @@ type Comments interface {
 
 type UseCases struct {
 	Users
-	Posts
+	Post
 	Comments
 }
 
@@ -34,9 +28,7 @@ type UseCaseDeps struct {
 }
 
 func NewUseCases(deps *UseCaseDeps) *UseCases {
-	return &UseCases{}
-}
-
-func (p *Post) AddIDPost(post *repository.Post) error {
-	return nil
+	return &UseCases{
+		Post: NewPostUseCase(deps.Repo.Post),
+	}
 }
