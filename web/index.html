@@ -4,29 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Forum</title>
 </head>
 
-<body style="background-color: #cccccc;">
-
-    <div id="formBody" style="display: flex;justify-content: center;align-items: center;height: 90vh;">
-
-        <form id="inputForm" onSubmit="return false;">
-
-            <label for="post">Post</label>
-            <input id="post" name="post" value="hello!!" type="text">
-            <button type="submit" style="width:100px;">Go ...</button>
-        </form>
-
-
-    </div>
-
-    <div id="serverPostBox" style="text-align: center;">
-
-
-    </div>
-
+<body>
+    <nav class="nav">
+        <a href="/" class="nav__link" data-link>Posts</a>
+        <a href="/add" class="nav__link" data-link>Create Post</a>
+    </nav>
+    <div id="app"></div>
+    <script type="module" src="/web/js/index.js"></script>
 </body>
-<script src="/web/js/main.js"></script>
 
 </html>
+
+
+
+<!-- style="background-color: #cccccc;"
+<div id="formBody" style="display: flex;justify-content: center;align-items: center;height: 90vh;">
+
+    <form id="inputForm" onSubmit="return false;">
+
+        <label for="post">Post</label>
+        <input id="post" name="post" value="hello!!" type="text">
+        <button type="submit" style="width:100px;">Go ...</button>
+    </form>
+
+
+</div>
+
+<div id="serverPostBox" style="text-align: center;">
+
+
+</div> -->

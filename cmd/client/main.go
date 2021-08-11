@@ -16,10 +16,8 @@ func main() {
 		log.Fatalf("Can't load index template: %s", err)
 	}
 
-	js := http.FileServer(http.Dir("./web/js"))
-	css := http.FileServer(http.Dir("./web/css"))
-	http.Handle("/web/js/", http.StripPrefix("/web/js/", js))
-	http.Handle("/web/css/", http.StripPrefix("/web/css/", css))
+	web := http.FileServer(http.Dir("./web"))
+	http.Handle("/web/", http.StripPrefix("/web/", web))
 	http.HandleFunc("/", indexHandler)
 	log.Fatal(http.ListenAndServe(config.CLIENT_PORT, nil))
 }
