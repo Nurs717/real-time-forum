@@ -8,13 +8,13 @@ export default class extends AbstractView {
 
     async getHtml() {
         return `
-        <h1>Welcome back, Dom</h1>
+        <h1>Posts</h1>
         <p>
-            Fugiat voluptate et nisi
-            </p>
-            <p>
-            <a href="/add' data-link>View recent posts</a>.
-            </p>
+            Here will be Posts
+        </p>
+        <p>
+            <a href="/add" data-link>Create Post</a>.
+        </p>
         `;
     }
 }

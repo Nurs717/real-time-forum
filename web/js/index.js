@@ -1,6 +1,9 @@
 import Posts from "./views/Posts.js";
+import AddPost from "./views/AddPost.js";
 
 console.log("JS Loaded");
+
+// const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
 const navigateTo = url => {
     history.pushState(null, null, url);
@@ -8,9 +11,10 @@ const navigateTo = url => {
 }
 
 const router = async() => {
+    // console.log(pathToRegex("/posts/:id"))
     const routes = [
         { path: "/", view: Posts },
-        // { path: "/add", view: () => console.log("Viewing Create Post") },
+        { path: "/add", view: AddPost },
     ];
 
     const potentialMatches = routes.map(route => {
@@ -32,8 +36,9 @@ const router = async() => {
     const view = new match.route.view();
 
     document.querySelector("#app").innerHTML = await view.getHtml();
+    view.Init();
 
-    console.log(match.route.view());
+    console.log(view);
 };
 
 window.addEventListener("popstate", router);
