@@ -13,14 +13,17 @@ func (h *Handler) MainPage() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case "GET":
-			path := r.URL.Path
-			fmt.Println(path)
-			if path == "/" {
-				path = "./web/index.html"
-			} else {
-				path = "." + path
+			posts, err := h.UseCases.Post.FindAll()
+			if err != nil {
+				log.Printf("Error occured %v\n", err)
 			}
-			http.ServeFile(w, r, path)
+			result, err := json.Marshal(posts)
+			if err != nil {
+				log.Printf("Error occured when marshalling %v\n", err)
+			}
+			fmt.Println("method get worked", string(result))
+			w.Write(result)
+
 		case "POST":
 			var post *entity.Post
 			data, err := ioutil.ReadAll(r.Body)
@@ -37,7 +40,6 @@ func (h *Handler) MainPage() http.HandlerFunc {
 				log.Printf("error adding ID to post %v\n", err)
 			}
 			fmt.Println("post from client:", post.Post, post.ID)
-			// fmt.Fprintf(w, "Server: %s\n", post.Post+" | "+time.Now().Format(time.RFC3339))
 		}
 	}
 }

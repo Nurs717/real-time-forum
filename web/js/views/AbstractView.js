@@ -14,4 +14,8 @@ export default class {
     async Init() {
 
     };
+
+    async getPosts() {
+
+    };
 }

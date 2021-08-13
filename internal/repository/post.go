@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"rtforum/internal/entity"
 )
 
@@ -26,5 +27,20 @@ func (r *PostRepo) Create(post *entity.Post) error {
 }
 
 func (r *PostRepo) FindAll() ([]entity.Post, error) {
-	return nil, nil
+	posts := []entity.Post{}
+	post, err := r.db.Query("SELECT P.Post FROM Post as P")
+	if err != nil {
+		log.Printf("error occured querying %v", err)
+		return nil, err
+	}
+	for post.Next() {
+		p := entity.Post{}
+		err := post.Scan(&p.Post)
+		if err != nil {
+			log.Printf("Error occured scanning Query %v", err)
+			return nil, err
+		}
+		posts = append(posts, p)
+	}
+	return posts, nil
 }

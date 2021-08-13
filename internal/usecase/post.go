@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"fmt"
+	"log"
 	"rtforum/errors"
 	"rtforum/internal/entity"
 	"rtforum/internal/repository"
@@ -43,6 +44,11 @@ func (u *PostUseCase) Create(post *entity.Post) error {
 	return nil
 }
 
-func (*PostUseCase) FindAll() ([]entity.Post, error) {
-	return nil, nil
+func (u *PostUseCase) FindAll() ([]entity.Post, error) {
+	posts, err := u.repo.FindAll()
+	if err != nil {
+		log.Printf("Error occured usecase getposts: %v", err)
+		return nil, err
+	}
+	return posts, nil
 }
