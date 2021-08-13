@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"rtforum/internal/entity"
-	"time"
 )
 
 func (h *Handler) MainPage() http.HandlerFunc {
@@ -35,10 +34,10 @@ func (h *Handler) MainPage() http.HandlerFunc {
 			}
 			err = h.UseCases.Post.Create(post)
 			if err != nil {
-				log.Fatalf("error adding ID to post %v\n", err)
+				log.Printf("error adding ID to post %v\n", err)
 			}
 			fmt.Println("post from client:", post.Post, post.ID)
-			fmt.Fprintf(w, "Server: %s\n", post.Post+" | "+time.Now().Format(time.RFC3339))
+			// fmt.Fprintf(w, "Server: %s\n", post.Post+" | "+time.Now().Format(time.RFC3339))
 		}
 	}
 }

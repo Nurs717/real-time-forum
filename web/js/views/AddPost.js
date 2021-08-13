@@ -32,9 +32,7 @@ export default class extends AbstractView {
 
                 method: "POST",
                 body: JSON.stringify({ post: formdata.get("post") }),
-            }).then(
-                response => response.text()
-            ).catch(
+            }).catch(
                 error => console.error(error)
             )
         })

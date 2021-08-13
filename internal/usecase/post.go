@@ -2,10 +2,11 @@ package usecase
 
 import (
 	"fmt"
-	"math/rand"
 	"rtforum/errors"
 	"rtforum/internal/entity"
 	"rtforum/internal/repository"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 type PostUseCase struct {
@@ -32,7 +33,7 @@ func (*PostUseCase) Validate(post *entity.Post) error {
 }
 
 func (u *PostUseCase) Create(post *entity.Post) error {
-	post.ID = rand.Int()
+	post.ID = uuid.NewV4().String()
 	err := u.repo.Create(post)
 	if err != nil {
 		fmt.Println("error occured usecase:", err)
