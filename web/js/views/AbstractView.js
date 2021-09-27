@@ -18,4 +18,8 @@ export default class {
     async getPosts() {
 
     };
+
+    async signUp() {
+
+    };
 }

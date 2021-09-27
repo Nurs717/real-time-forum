@@ -6,6 +6,7 @@ import (
 )
 
 type Users interface {
+	NewUser(user *entity.User) error
 }
 
 type Post interface {
@@ -29,6 +30,7 @@ type UseCaseDeps struct {
 
 func NewUseCases(deps *UseCaseDeps) *UseCases {
 	return &UseCases{
-		Post: NewPostUseCase(deps.Repo.Post),
+		Users: NewUserUseCase(deps.Repo.Users),
+		Post:  NewPostUseCase(deps.Repo.Post),
 	}
 }

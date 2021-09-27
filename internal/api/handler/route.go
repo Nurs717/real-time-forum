@@ -9,6 +9,6 @@ func (h *Handler) Router() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", middleware.EnableCORS(h.MainPage()))
 	mux.HandleFunc("/login", LogIn())
-	mux.HandleFunc("/signup", SignUp())
+	mux.HandleFunc("/signup", h.SignUp)
 	return mux
 }

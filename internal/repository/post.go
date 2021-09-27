@@ -37,7 +37,7 @@ func (r *PostRepo) FindAll() ([]entity.Post, error) {
 		p := entity.Post{}
 		err := post.Scan(&p.Post)
 		if err != nil {
-			log.Printf("Error occured scanning Query %v", err)
+			log.Printf("Error occured scanning Query %v\n", err)
 			return nil, err
 		}
 		posts = append(posts, p)

@@ -6,6 +6,7 @@ import (
 )
 
 type Users interface {
+	NewUser(user *entity.User) error
 }
 
 type Post interface {

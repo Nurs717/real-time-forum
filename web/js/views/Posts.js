@@ -29,7 +29,7 @@ export default class extends AbstractView {
         ).then(
             (data) => {
                 console.log('hello', data)
-                document.getElementById("posts").innerHTML = data[0].post;
+                document.getElementById("posts").innerHTML = data[1].post;
             }
         )
     }
