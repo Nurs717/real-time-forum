@@ -17,7 +17,7 @@ func ConnectDB() (*sql.DB, error) {
 		return nil, err
 	}
 	tables := []string{`CREATE TABLE IF NOT EXISTS Post (ID TEXT PRIMARY KEY, Post TEXT);`,
-		`CREATE TABLE IF NOT EXISTS Users (ID TEXT PRIMARY KEY, First_Name TEXT, Last_Name TEXT, Email TEXT, Password TEXT)`}
+		`CREATE TABLE IF NOT EXISTS Users (ID TEXT PRIMARY KEY, First_Name TEXT, Last_Name TEXT, Mail TEXT, Password TEXT)`}
 
 	for _, v := range tables {
 		_, err = db.Exec(v)

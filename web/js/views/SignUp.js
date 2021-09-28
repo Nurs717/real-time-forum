@@ -34,7 +34,7 @@ export default class extends AbstractView {
     }
 
     async signUp() {
-        const url = "http://localhost:8080/"
+        const url = "http://localhost:8080/signup"
 
         var inputForm = document.getElementById("inputForm2")
 

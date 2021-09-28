@@ -27,6 +27,7 @@ const router = async() => {
     });
 
     let match = potentialMatches.find(potentialMatch => potentialMatch.isMatch);
+    console.log(match);
 
     if (!match) {
         match = {
@@ -40,6 +41,7 @@ const router = async() => {
     document.querySelector("#app").innerHTML = await view.getHtml();
     view.Init();
     view.getPosts();
+    view.signUp();
 
     console.log(view);
 };
