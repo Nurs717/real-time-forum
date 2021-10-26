@@ -3,21 +3,13 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor() {
         super();
-        this.setTitle("SignUp");
+        this.setTitle("LogIn");
     }
 
     async getHtml() {
         return `
-        <h1>Please Register</h1>
-        <form id="signUpInputForm" onSubmit="return false;">
-        <div>
-        <label for="firstname">First Name</label>
-        <input id="firstname" name="firstname" type="text">
-        </div>
-        <div>
-        <label for="lastname">Last Name</label>
-        <input id="lastname" name="lastname" type="text">
-        </div>
+        <h1>Login</h1>
+        <form id="loginInputForm" onSubmit="return false;">
         <div>
         <label for="email">Email</label>
         <input id="email" name="email" type="text">
@@ -27,16 +19,16 @@ export default class extends AbstractView {
         <input id="password" name="" type="text">
         </div>
         <div>
-        <button type="submit" style="width:100px;">Register</button>
+        <button type="submit" style="width:100px;">Login</button>
         </div>
         </form>
         `;
     }
 
     async signUp() {
-        const url = "http://localhost:8080/signup"
+        const url = "http://localhost:8080/login"
 
-        var inputForm = document.getElementById("signUpInputForm")
+        var inputForm = document.getElementById("loginInputForm")
 
         inputForm.addEventListener("submit", (e) => {
 
@@ -47,7 +39,7 @@ export default class extends AbstractView {
             fetch(url, {
 
                 method: "POST",
-                body: JSON.stringify({ firstname: formdata.get("firstname"), lastname: formdata.get("lastname"), email: formdata.get("email"), password: formdata.get("password") }),
+                body: JSON.stringify({ email: formdata.get("email"), password: formdata.get("password") }),
             }).catch(
                 error => console.error(error)
             )

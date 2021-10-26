@@ -1,6 +1,7 @@
 import Posts from "./views/Posts.js";
 import AddPost from "./views/AddPost.js";
 import SignUp from "./views/SignUp.js";
+import LogIn from "./views/LogIn.js";
 
 console.log("JS Loaded");
 
@@ -17,6 +18,7 @@ const router = async() => {
         { path: "/", view: Posts },
         { path: "/add", view: AddPost },
         { path: "/signup", view: SignUp },
+        { path: "/login", view: LogIn },
     ];
 
     const potentialMatches = routes.map(route => {

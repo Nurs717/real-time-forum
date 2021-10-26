@@ -6,4 +6,10 @@ import "errors"
 var ErrInvalidEntity = errors.New("invalid entity")
 
 //ErrEmptyPost empty post
-var ErrEmptyPost = errors.New("The post is empty")
+var ErrEmptyPost = errors.New("the post is empty")
+
+//ErrMailNotExist when loging in there is no user with that email
+var ErrMailNotExist = errors.New("there is no user with this mail")
+
+//ErrWrongPasswor password of User is wrong while loging in
+var ErrWrongPassword = errors.New("password of User is wrong while loging in")

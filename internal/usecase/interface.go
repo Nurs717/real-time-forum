@@ -1,12 +1,14 @@
 package usecase
 
 import (
+	"net/http"
 	"rtforum/internal/entity"
 	"rtforum/internal/repository"
 )
 
 type Users interface {
 	NewUser(user *entity.User) error
+	SetCookie(user *entity.User) (*http.Cookie, error)
 }
 
 type Post interface {

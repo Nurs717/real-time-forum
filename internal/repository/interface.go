@@ -3,10 +3,13 @@ package repository
 import (
 	"database/sql"
 	"rtforum/internal/entity"
+	"time"
 )
 
 type Users interface {
 	NewUser(user *entity.User) error
+	GetUser(mail string) (string, string, error)
+	AddCookie(id string, cookieValue string, dt time.Time) error
 }
 
 type Post interface {
