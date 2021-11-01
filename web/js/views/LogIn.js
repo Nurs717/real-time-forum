@@ -36,13 +36,41 @@ export default class extends AbstractView {
             e.preventDefault()
 
             const formdata = new FormData(inputForm)
-            fetch(url, {
 
-                method: "POST",
+            let req = new Request(url, {
+                mode: 'cors',
+                method: 'POST',
+                credentials: 'include',
                 body: JSON.stringify({ email: formdata.get("email"), password: formdata.get("password") }),
-            }).catch(
-                error => console.error(error)
-            )
+            });
+            fetch(req)
+                .then((resp) => {
+                    resp.headers.forEach((val, key) => {
+                        console.log(key, val);
+                    });
+                    let cookie = resp.headers.get('set-cookie');
+                    console.log('set-cookie header value', cookie);
+
+                    return resp.json();
+                })
+                .catch((err) => {
+                    console.warn(err);
+                });
+
+            // fetch(url, {
+            //         mode: 'cors',
+            //         method: 'POST',
+            //         credentials: 'same-origin',
+            //         body: JSON.stringify({ email: formdata.get("email"), password: formdata.get("password") }),
+            //     })
+            //     .then(res => {
+            //         let cookie = res.headers.get('set-cookie');
+            //         console.log('set-cookie header value', cookie);
+            //         return res.json();
+            //     })
+            //     .catch(error => {
+            //         console.error(error);
+            //     })
         })
     }
 }

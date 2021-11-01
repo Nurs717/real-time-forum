@@ -53,15 +53,15 @@ func (u *UserUseCase) SetCookie(user *entity.User) (*http.Cookie, error) {
 		return nil, errors.ErrWrongPassword
 	}
 
-	expire := time.Now().Add(24 * time.Hour)
+	expire := time.Now().Add(1 * time.Hour)
 	u1 := uuid.NewV4()
-
 	cookie := &http.Cookie{
 		Name:     "session",
 		Value:    u1.String(),
-		Expires:  expire,
 		Path:     "/",
-		HttpOnly: true,
+		Expires:  expire,
+		SameSite: http.SameSiteLaxMode,
+		// HttpOnly: true,
 	}
 	err = u.repo.AddCookie(id, cookie.Value, expire)
 	if err != nil {

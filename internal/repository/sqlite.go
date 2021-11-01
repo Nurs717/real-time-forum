@@ -37,7 +37,7 @@ func ConnectDB() (*sql.DB, error) {
 func deleteExpiredSessions(db *sql.DB) {
 	ticker := time.NewTicker(5 * time.Minute)
 	for range ticker.C {
-		_, err := db.Exec("DELETE FROM Session WHERE Expired_Date > DATETIME('now')")
+		_, err := db.Exec("DELETE FROM Session WHERE Expired_Date < DATETIME('now')")
 		if err != nil {
 			log.Printf("error while deleting expired sessions: %v", err)
 		}
