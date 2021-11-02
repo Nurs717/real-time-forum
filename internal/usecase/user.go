@@ -61,7 +61,6 @@ func (u *UserUseCase) SetCookie(user *entity.User) (*http.Cookie, error) {
 		Path:     "/",
 		Expires:  expire,
 		SameSite: http.SameSiteLaxMode,
-		// HttpOnly: true,
 	}
 	err = u.repo.AddCookie(id, cookie.Value, expire)
 	if err != nil {

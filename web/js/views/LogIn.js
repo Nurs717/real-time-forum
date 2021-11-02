@@ -1,4 +1,5 @@
 import AbstractView from "./AbstractView.js";
+import Post from "./Posts.js";
 
 export default class extends AbstractView {
     constructor() {
@@ -21,11 +22,14 @@ export default class extends AbstractView {
         <div>
         <button type="submit" style="width:100px;">Login</button>
         </div>
+        <p>
+            <a href="/signup" data-link>Sign Up</a>.
+        </p>
         </form>
         `;
     }
 
-    async signUp() {
+    async logIn() {
         const url = "http://localhost:8080/login"
 
         var inputForm = document.getElementById("loginInputForm")
@@ -44,33 +48,17 @@ export default class extends AbstractView {
                 body: JSON.stringify({ email: formdata.get("email"), password: formdata.get("password") }),
             });
             fetch(req)
-                .then((resp) => {
-                    resp.headers.forEach((val, key) => {
-                        console.log(key, val);
-                    });
-                    let cookie = resp.headers.get('set-cookie');
-                    console.log('set-cookie header value', cookie);
-
-                    return resp.json();
+                .then(async(resp) => {
+                    if (resp.ok) {
+                        window.history.pushState("", "", '/');
+                        var view = new Post;
+                        document.querySelector("#app").innerHTML = await view.getHtml();
+                        view.getPosts();
+                    }
                 })
                 .catch((err) => {
-                    console.warn(err);
+                    console.error(err);
                 });
-
-            // fetch(url, {
-            //         mode: 'cors',
-            //         method: 'POST',
-            //         credentials: 'same-origin',
-            //         body: JSON.stringify({ email: formdata.get("email"), password: formdata.get("password") }),
-            //     })
-            //     .then(res => {
-            //         let cookie = res.headers.get('set-cookie');
-            //         console.log('set-cookie header value', cookie);
-            //         return res.json();
-            //     })
-            //     .catch(error => {
-            //         console.error(error);
-            //     })
         })
     }
 }
