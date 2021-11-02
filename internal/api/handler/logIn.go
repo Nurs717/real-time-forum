@@ -25,7 +25,7 @@ func (h *Handler) LogIn(w http.ResponseWriter, r *http.Request) {
 		cookie, err := h.UseCases.SetCookie(user)
 		if err != nil {
 			log.Printf("Error occured in LogIn handler: %v\n", err)
-			http.Error(w, "user not exist", 404)
+			http.Error(w, "user not exist", http.StatusUnauthorized)
 			return
 		}
 		fmt.Println(cookie)

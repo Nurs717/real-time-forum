@@ -22,6 +22,7 @@ export default class extends AbstractView {
         <div>
         <button type="submit" style="width:100px;">Login</button>
         </div>
+        <div id="invalid_user"></div>
         <p>
             <a href="/signup" data-link>Sign Up</a>.
         </p>
@@ -35,7 +36,6 @@ export default class extends AbstractView {
         var inputForm = document.getElementById("loginInputForm")
 
         inputForm.addEventListener("submit", (e) => {
-
             //prevent auto submission
             e.preventDefault()
 
@@ -54,10 +54,13 @@ export default class extends AbstractView {
                         var view = new Post;
                         document.querySelector("#app").innerHTML = await view.getHtml();
                         view.getPosts();
+                    } else if (resp.status == 401) {
+                        document.getElementById("invalid_user").innerHTML = "invalid user or password"
                     }
                 })
                 .catch((err) => {
-                    console.error(err);
+                    // document.getElementById("invalid_user").innerHTML = "invalid user or password"
+                    console.error("ss", err);
                 });
         })
     }

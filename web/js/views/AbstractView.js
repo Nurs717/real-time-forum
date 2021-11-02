@@ -11,19 +11,19 @@ export default class {
         return "";
     }
 
-    //     async Init() {
+    async Init() {
 
-    //     };
+    };
 
-    //     async getPosts() {
+    async getPosts() {
 
-    //     };
+    };
 
-    //     async signUp() {
+    async signUp() {
 
-    //     };
+    };
 
-    //     async logIn() {
+    async logIn() {
 
-    //     };
+    };
 }

@@ -6,22 +6,33 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"rtforum/internal/api/middleware"
 	"rtforum/internal/entity"
 )
 
 func (h *Handler) MainPage() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println(r.Cookie("session"))
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			log.Printf("error occured while checking cookie: %v", err)
+			return
+		}
+		if !middleware.CheckCookie(cookie) {
+			http.Error(w, "cookie denied", http.StatusUnauthorized)
+		}
 		switch r.Method {
 		case "GET":
 			posts, err := h.UseCases.Post.FindAll()
 			if err != nil {
 				log.Printf("Error occured %v\n", err)
+				return
 			}
 			result, err := json.Marshal(posts)
 			if err != nil {
 				log.Printf("Error occured when marshalling %v\n", err)
+				return
 			}
-			fmt.Println("method get worked", string(result))
 			w.Write(result)
 
 		case "POST":

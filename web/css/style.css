@@ -35,3 +35,7 @@ nav__link:hover {
 a {
     color: #009579
 }
+
+#invalid_user {
+    color: red;
+}

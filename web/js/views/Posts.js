@@ -24,12 +24,18 @@ export default class extends AbstractView {
 
         fetch(url, {
             method: "GET",
+            credentials: 'include'
         }).then(
             response => response.json()
         ).then(
             (data) => {
-                console.log('hello', data)
-                document.getElementById("posts").innerHTML = data[1].post;
+                // console.log('hello', data);
+                let posts = document.getElementById("posts");
+                data.map(post => {
+                    let line = document.createElement('p');
+                    line.innerText = post.post;
+                    posts.appendChild(line);
+                })
             }
         )
     }
