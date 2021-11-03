@@ -70,6 +70,11 @@ func (u *UserUseCase) SetCookie(user *entity.User) (*http.Cookie, error) {
 	return cookie, nil
 }
 
+func (r *UserUseCase) IsCookieValid(token string) bool {
+
+	return false
+}
+
 func generatePassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 	if err != nil {

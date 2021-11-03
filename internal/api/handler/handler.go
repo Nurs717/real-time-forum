@@ -2,10 +2,6 @@ package handler
 
 import "rtforum/internal/usecase"
 
-type Post struct {
-	Post string `json:"post"`
-}
-
 type Handler struct {
 	UseCases *usecase.UseCases
 }
