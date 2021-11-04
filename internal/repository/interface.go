@@ -10,6 +10,7 @@ type Users interface {
 	NewUser(user *entity.User) error
 	GetUser(mail string) (string, string, error)
 	AddCookie(id string, cookieValue string, dt time.Time) error
+	GetUserIDbyCookie(token string) (string, error)
 }
 
 type Post interface {

@@ -70,9 +70,13 @@ func (u *UserUseCase) SetCookie(user *entity.User) (*http.Cookie, error) {
 	return cookie, nil
 }
 
-func (r *UserUseCase) IsCookieValid(token string) bool {
-
-	return false
+func (r *UserUseCase) IsCookieValid(token string) (string, error) {
+	userID, err := r.repo.GetUserIDbyCookie(token)
+	if err != nil {
+		log.Printf("error occured while checking cookie in usecase: %v", err)
+		return "", err
+	}
+	return userID, nil
 }
 
 func generatePassword(password string) (string, error) {

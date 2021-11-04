@@ -58,3 +58,25 @@ func (r *UsersRepo) AddCookie(id string, cookieValue string, dt time.Time) error
 	}
 	return nil
 }
+
+func (r *UsersRepo) GetUserIDbyCookie(token string) (string, error) {
+	rows, err := r.db.Query("SELECT Token, User_ID from Session WHERE Expired_Date > DATETIME('now')")
+	if err != nil {
+		log.Printf("error occured getUser from db: %v\n", err)
+		return "", err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var id string
+		var tokenScan string
+		err := rows.Scan(&tokenScan, &id)
+		if err != nil {
+			log.Printf("error occured getUser scanning rows from db: %v\n", err)
+			continue
+		}
+		if token == tokenScan {
+			return id, nil
+		}
+	}
+	return "", errors.ErrTokenInvalid
+}

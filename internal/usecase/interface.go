@@ -9,7 +9,7 @@ import (
 type Users interface {
 	NewUser(user *entity.User) error
 	SetCookie(user *entity.User) (*http.Cookie, error)
-	IsCookieValid(token string) bool
+	IsCookieValid(token string) (string, error)
 }
 
 type Post interface {

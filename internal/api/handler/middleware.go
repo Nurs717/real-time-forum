@@ -1,6 +1,9 @@
 package handler
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+)
 
 func EnableCORS(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -13,14 +16,31 @@ func EnableCORS(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+type CtxKey string
+
+const CtxReqIdKey CtxKey = "X-Request-Id"
+
 func (h *Handler) CheckCookie(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// r.Header.Add()
 		cookie, err := r.Cookie("session")
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
+			return
 		}
-		h.UseCases.IsCookieValid(cookie.Value)
-		next.ServeHTTP(w, r)
+		userID, err := h.UseCases.IsCookieValid(cookie.Value)
+		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			next.ServeHTTP(w, r)
+			return
+		}
+		CtxKey := r.Header.Get("X-Request-Id")
+		if CtxKey == "" {
+			CtxKey = userID
+		}
+
+		ctx1 := context.WithValue(r.Context(), CtxReqIdKey, CtxKey)
+		ctx2 := r.WithContext(ctx1)
+
+		next.ServeHTTP(w, ctx2)
 	}
 }

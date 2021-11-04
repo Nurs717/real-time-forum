@@ -26,7 +26,13 @@ export default class extends AbstractView {
             method: "GET",
             credentials: 'include'
         }).then(
-            response => response.json()
+            (response) => {
+                if (response.ok) {
+                    response.json()
+                } else {
+                    return
+                }
+            }
         ).then(
             (data) => {
                 // console.log('hello', data);

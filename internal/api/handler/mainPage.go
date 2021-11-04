@@ -10,7 +10,10 @@ import (
 )
 
 func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Cookie("session"))
+	// fmt.Println(r.Response.Status)
+	// fmt.Println(r.Cookie("session"))
+	fmt.Println("id from middleware", r.Context().Value(CtxReqIdKey))
+	// fmt.Println(CtxReqIdKey)
 	switch r.Method {
 	case "GET":
 		posts, err := h.UseCases.Post.FindAll()
