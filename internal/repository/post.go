@@ -18,7 +18,7 @@ func NewPostRepo(db *sql.DB) *PostRepo {
 }
 
 func (r *PostRepo) Create(post *entity.Post) error {
-	_, err := r.db.Exec("INSERT INTO Post (ID, Post) VALUES (?, ?)", post.ID, post.Post)
+	_, err := r.db.Exec("INSERT INTO Post (Post) VALUES (?)", post.Post)
 	if err != nil {
 		fmt.Println("error occured adding post to db:", err)
 		return err

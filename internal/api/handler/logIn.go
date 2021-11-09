@@ -10,6 +10,16 @@ import (
 )
 
 func (h *Handler) LogIn(w http.ResponseWriter, r *http.Request) {
+	// fmt.Println(r.Context().Value(CtxReqIdKey))
+	if r.Context().Value(CtxReqIdKey) != "Guest" {
+		w.WriteHeader(http.StatusAccepted)
+		return
+	}
+	fmt.Println(r.Cookie("session"))
+	// _, err := r.Cookie("session")
+	// if err == nil {
+	// 	return
+	// }
 	switch r.Method {
 	case "POST":
 		var user *entity.User
@@ -19,13 +29,15 @@ func (h *Handler) LogIn(w http.ResponseWriter, r *http.Request) {
 			log.Printf("error reading body %v\n", err)
 		}
 		err = json.Unmarshal(data, &user)
+		if user == nil {
+			return
+		}
 		if err != nil {
 			log.Printf("error unmarshaling %v\n", err)
 		}
 		cookie, err := h.UseCases.SetCookie(user)
 		if err != nil {
 			log.Printf("Error occured in LogIn handler: %v\n", err)
-			// http.Error(w, "user not exist", http.StatusUnauthorized)
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}

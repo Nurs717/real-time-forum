@@ -14,16 +14,4 @@ export default class {
     async Init() {
 
     };
-
-    async getPosts() {
-
-    };
-
-    async signUp() {
-
-    };
-
-    async logIn() {
-
-    };
 }

@@ -23,21 +23,17 @@ const CtxReqIdKey CtxKey = "X-Request-Id"
 func (h *Handler) CheckCookie(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("session")
+		CtxKey := ""
 		if err != nil {
-			w.WriteHeader(http.StatusUnauthorized)
-			return
+			CtxKey = "Guest"
+		} else {
+			userID, err := h.UseCases.IsCookieValid(cookie.Value)
+			if err != nil {
+				CtxKey = "Guest"
+			} else {
+				CtxKey = userID
+			}
 		}
-		userID, err := h.UseCases.IsCookieValid(cookie.Value)
-		if err != nil {
-			w.WriteHeader(http.StatusUnauthorized)
-			next.ServeHTTP(w, r)
-			return
-		}
-		CtxKey := r.Header.Get("X-Request-Id")
-		if CtxKey == "" {
-			CtxKey = userID
-		}
-
 		ctx1 := context.WithValue(r.Context(), CtxReqIdKey, CtxKey)
 		ctx2 := r.WithContext(ctx1)
 

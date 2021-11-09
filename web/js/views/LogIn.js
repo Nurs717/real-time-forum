@@ -30,16 +30,38 @@ export default class extends AbstractView {
         `;
     }
 
+
+    async Init() {
+        this.logIn();
+    }
+
     async logIn() {
         const url = "http://localhost:8080/login"
 
         var inputForm = document.getElementById("loginInputForm")
+
+        fetch(url, {
+            mode: 'cors',
+            method: 'POST',
+            credentials: 'include',
+        }).then(async(resp) => {
+            console.log("login resp:", resp.status)
+            if (resp.status == 202) {
+                window.history.pushState("", "", '/');
+                var view = new Post;
+                document.querySelector("#app").innerHTML = await view.getHtml();
+                view.getPosts();
+                return
+            }
+            console.log(resp.status)
+        })
 
         inputForm.addEventListener("submit", (e) => {
             //prevent auto submission
             e.preventDefault()
 
             const formdata = new FormData(inputForm)
+
 
             let req = new Request(url, {
                 mode: 'cors',
@@ -59,8 +81,7 @@ export default class extends AbstractView {
                     }
                 })
                 .catch((err) => {
-                    // document.getElementById("invalid_user").innerHTML = "invalid user or password"
-                    console.error("ss", err);
+                    console.error(err);
                 });
         })
     }

@@ -39,3 +39,164 @@ a {
 #invalid_user {
     color: red;
 }
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.filterwrap {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    height: 50px;
+    border: 5px solid white;
+    background-color: rgb(43, 145, 97);
+    border-radius: 10px;
+}
+
+.filter {
+    margin: 5px;
+}
+
+.btn {
+    border-radius: 25px;
+    margin: 1rem 0;
+    outline: none;
+    border: white 2px solid;
+    background-image: linear-gradient(to right, rgb(43, 145, 97), rgb(43, 145, 97), rgb(43, 145, 97));
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+    background-size: 100%;
+    transition: 0.5s;
+    color: white;
+}
+
+.option {
+    border-radius: 25px;
+    margin: 1rem 0;
+    outline: none;
+    border: white 2px solid;
+    background-image: linear-gradient(to right, rgb(43, 145, 97), rgb(43, 145, 97), rgb(43, 145, 97));
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+    background-size: 100%;
+    transition: 0.5s;
+    color: white;
+}
+
+.post-wrap {
+    margin: auto;
+    border: 1px solid rgb(43, 145, 97);
+    border-radius: 10px;
+    width: 80%;
+    padding: 10px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
+    margin: 17px;
+    padding: 10px;
+    outline: none;
+    border: white 2px solid;
+    background-image: linear-gradient(to right, rgb(43, 145, 97), rgb(43, 145, 97), rgb(43, 145, 97));
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    background-size: 200%;
+    transition: 0.5s;
+    color: white;
+}
+
+.UserName {
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.row {
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.body {
+    margin: 20px;
+    padding: 5px;
+    border-bottom: 2px solid teal;
+    border-top: 2px solid teal;
+}
+
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.time {
+    outline: none;
+    border: white 2px solid;
+    background-image: linear-gradient(to right, rgb(43, 145, 97), rgb(43, 145, 97), rgb(43, 145, 97));
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.comment {
+    display: flex;
+    margin: 20px;
+    padding: 5px;
+    border: 2px solid teal;
+    border-radius: 10px;
+}
+
+.commentbody {
+    margin: 10px;
+}
+
+.UserNamee {
+    margin: 10px;
+    color: teal;
+}
+
+.btnpost {
+    border-radius: 10px;
+    padding: 10px;
+    outline: none;
+    border: white 2px solid;
+    background-image: linear-gradient(to right, rgb(43, 145, 97), rgb(43, 145, 97), rgb(43, 145, 97));
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+    background-size: 100%;
+    transition: 0.5s;
+    color: white;
+}
+
+.CP {
+    padding-left: 20px;
+}
+
+.LP {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.posts {
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+}
+
+.btnpostt {
+    display: flex;
+    justify-content: flex-end;
+}

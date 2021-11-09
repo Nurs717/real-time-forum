@@ -42,9 +42,6 @@ const router = async() => {
 
     document.querySelector("#app").innerHTML = await view.getHtml();
     view.Init();
-    view.getPosts();
-    view.signUp();
-    view.logIn();
 
     console.log(view);
 };

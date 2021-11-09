@@ -11,6 +11,9 @@ export default class extends AbstractView {
         <h1>Please Register</h1>
         <form id="signUpInputForm" onSubmit="return false;">
         <div>
+        <label for="username">UserName</label>
+        <input id="username" name="username" type="text">
+        </div>
         <label for="firstname">First Name</label>
         <input id="firstname" name="firstname" type="text">
         </div>
@@ -33,6 +36,10 @@ export default class extends AbstractView {
         `;
     }
 
+    async Init() {
+        this.signUp();
+    }
+
     async signUp() {
         const url = "http://localhost:8080/signup"
 
@@ -47,7 +54,7 @@ export default class extends AbstractView {
             fetch(url, {
 
                 method: "POST",
-                body: JSON.stringify({ firstname: formdata.get("firstname"), lastname: formdata.get("lastname"), email: formdata.get("email"), password: formdata.get("password") }),
+                body: JSON.stringify({ username: formdata.get("username"), firstname: formdata.get("firstname"), lastname: formdata.get("lastname"), email: formdata.get("email"), password: formdata.get("password") }),
             }).catch(
                 error => console.error(error)
             )

@@ -19,7 +19,7 @@ func NewUsersRepo(db *sql.DB) *UsersRepo {
 }
 
 func (r *UsersRepo) NewUser(user *entity.User) error {
-	_, err := r.db.Exec("INSERT INTO Users (ID, First_Name, Last_name, Mail, Password) VALUES (?, ?, ?, ?, ?)", user.ID, user.FirstName, user.LastName, user.Email, user.Password)
+	_, err := r.db.Exec("INSERT INTO Users (ID, UserName, First_Name, Last_name, Mail, Password) VALUES (?, ?, ?, ?, ?, ?)", user.ID, user.UserName, user.FirstName, user.LastName, user.Email, user.Password)
 	if err != nil {
 		log.Printf("error occured adding post to db: %v\n", err)
 		return err

@@ -6,8 +6,7 @@ import (
 	"rtforum/errors"
 	"rtforum/internal/entity"
 	"rtforum/internal/repository"
-
-	uuid "github.com/satori/go.uuid"
+	"time"
 )
 
 type PostUseCase struct {
@@ -34,7 +33,8 @@ func (*PostUseCase) Validate(post *entity.Post) error {
 }
 
 func (u *PostUseCase) Create(post *entity.Post) error {
-	post.ID = uuid.NewV4().String()
+	date := time.Now().Format("2006-01-02 15:04:05")
+	post.PostDate = date
 	err := u.repo.Create(post)
 	if err != nil {
 		fmt.Println("error occured usecase:", err)

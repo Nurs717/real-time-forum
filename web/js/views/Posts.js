@@ -19,6 +19,10 @@ export default class extends AbstractView {
         `;
     }
 
+    async Init() {
+        this.getPosts();
+    }
+
     async getPosts() {
         const url = "http://localhost:8080/"
 
@@ -27,11 +31,7 @@ export default class extends AbstractView {
             credentials: 'include'
         }).then(
             (response) => {
-                if (response.ok) {
-                    response.json()
-                } else {
-                    return
-                }
+                return response.json()
             }
         ).then(
             (data) => {

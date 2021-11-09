@@ -10,7 +10,6 @@ import (
 )
 
 func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
-	// fmt.Println(r.Response.Status)
 	// fmt.Println(r.Cookie("session"))
 	fmt.Println("id from middleware", r.Context().Value(CtxReqIdKey))
 	// fmt.Println(CtxReqIdKey)
@@ -39,6 +38,7 @@ func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("error unmarshaling %v\n", err)
 		}
+		post.UserID = r.Context().Value(CtxReqIdKey).(string)
 		err = h.UseCases.Post.Create(post)
 		if err != nil {
 			log.Printf("error adding ID to post %v\n", err)
