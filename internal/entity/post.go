@@ -2,10 +2,10 @@ package entity
 
 type Post struct {
 	ID         int
-	Post       string `json:"post"`
+	Body       string `json:"post_body"`
+	Title      string `json:"post_title"`
 	UserID     string
-	PostBody   string
 	PostDate   string
-	Category   string
+	Category   string `json:"category"`
 	LikeCounts int
 }

@@ -24,7 +24,7 @@ func (*PostUseCase) Validate(post *entity.Post) error {
 		err := errors.ErrEmptyPost
 		return err
 	}
-	if post.Post == "" {
+	if post.Body == "" {
 		err := errors.ErrEmptyPost
 		return err
 	}

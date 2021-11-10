@@ -25,6 +25,7 @@ func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 			log.Printf("Error occured when marshalling %v\n", err)
 			return
 		}
+		fmt.Println("get posts: ", string(result))
 		w.Write(result)
 
 	case "POST":
@@ -41,8 +42,8 @@ func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 		post.UserID = r.Context().Value(CtxReqIdKey).(string)
 		err = h.UseCases.Post.Create(post)
 		if err != nil {
-			log.Printf("error adding ID to post %v\n", err)
+			log.Printf("error adding post in handler: %v\n", err)
 		}
-		fmt.Println("post from client:", post.Post, post.ID)
+		fmt.Println("post from client:", post)
 	}
 }

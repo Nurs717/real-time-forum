@@ -35,11 +35,11 @@ export default class extends AbstractView {
             }
         ).then(
             (data) => {
-                // console.log('hello', data);
+                console.log('hello', data);
                 let posts = document.getElementById("posts");
                 data.map(post => {
                     let line = document.createElement('p');
-                    line.innerText = post.post;
+                    line.innerText = post.post_body;
                     posts.appendChild(line);
                 })
             }

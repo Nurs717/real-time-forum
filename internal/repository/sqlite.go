@@ -19,7 +19,9 @@ func ConnectDB() (*sql.DB, error) {
 	}
 	tables := []string{
 		`PRAGMA foreign_keys = ON;`,
-		`CREATE TABLE IF NOT EXISTS Post (ID INTEGER PRIMARY KEY AUTOINCREMENT, Post TEXT);`,
+		`CREATE TABLE IF NOT EXISTS Post (ID INTEGER PRIMARY KEY AUTOINCREMENT, Body TEXT, Title TEXT, User_ID TEXT, Date TEXT, Category TEXT);`,
+		`CREATE TABLE IF NOT EXISTS Category (NAME TEXT PRIMARY KEY, UNIQUE(NAME))`,
+		`CREATE TABLE IF NOT EXISTS Category_Map (Post_ID INTEGER, Category_ID TEXT, FOREIGN KEY(Post_ID)REFERENCES Post(ID), FOREIGN KEY(Category_ID)REFERENCES Category(NAME))`,
 		`CREATE TABLE IF NOT EXISTS Users (ID TEXT PRIMARY KEY, UserName TEXT, First_Name TEXT, Last_Name TEXT, Mail TEXT, Password TEXT);`,
 		`CREATE TABLE IF NOT EXISTS Session (Token TEXT PRIMARY KEY, Expired_Date DATETIME, User_ID TEXT, FOREIGN KEY(User_ID)REFERENCES Users(ID));`,
 	}
@@ -30,6 +32,7 @@ func ConnectDB() (*sql.DB, error) {
 			log.Fatalf("DB ERROR EXEC: %q\n%v", v, err.Error())
 		}
 	}
+
 	go deleteExpiredSessions(db)
 	return db, nil
 }
