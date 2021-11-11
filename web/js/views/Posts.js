@@ -24,6 +24,8 @@ export default class extends AbstractView {
     }
 
     async getPosts() {
+        const myurl = new URL(window.location.href);
+        console.log(myurl)
         const url = "http://localhost:8080/"
 
         fetch(url, {
@@ -39,7 +41,7 @@ export default class extends AbstractView {
                 let posts = document.getElementById("posts");
                 data.map(post => {
                     let line = document.createElement('p');
-                    line.innerText = post.post_body;
+                    line.innerText = 'username: ' + post.username + ' title: ' + post.post_title;
                     posts.appendChild(line);
                 })
             }

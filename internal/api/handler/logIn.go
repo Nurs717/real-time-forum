@@ -10,12 +10,12 @@ import (
 )
 
 func (h *Handler) LogIn(w http.ResponseWriter, r *http.Request) {
-	// fmt.Println(r.Context().Value(CtxReqIdKey))
+	fmt.Println("login handler:", r.Context().Value(CtxReqIdKey))
 	if r.Context().Value(CtxReqIdKey) != "Guest" {
 		w.WriteHeader(http.StatusAccepted)
 		return
 	}
-	fmt.Println(r.Cookie("session"))
+	// fmt.Println(r.Cookie("session"))
 	// _, err := r.Cookie("session")
 	// if err == nil {
 	// 	return

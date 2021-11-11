@@ -16,7 +16,7 @@ const router = async() => {
     // console.log(pathToRegex("/posts/:id"))
     const routes = [
         { path: "/", view: Posts },
-        { path: "/add", view: AddPost },
+        { path: "/create-post", view: AddPost },
         { path: "/signup", view: SignUp },
         { path: "/login", view: LogIn },
     ];

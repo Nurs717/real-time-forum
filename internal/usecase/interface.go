@@ -15,7 +15,7 @@ type Users interface {
 type Post interface {
 	Validate(post *entity.Post) error
 	Create(post *entity.Post) error
-	FindAll() ([]entity.Post, error)
+	GetAllPosts() ([]entity.Post, error)
 }
 
 type Comments interface {

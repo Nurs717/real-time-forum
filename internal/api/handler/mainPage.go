@@ -3,10 +3,8 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"rtforum/internal/entity"
 )
 
 func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
@@ -15,7 +13,7 @@ func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 	// fmt.Println(CtxReqIdKey)
 	switch r.Method {
 	case "GET":
-		posts, err := h.UseCases.Post.FindAll()
+		posts, err := h.UseCases.Post.GetAllPosts()
 		if err != nil {
 			log.Printf("Error occured %v\n", err)
 			return
@@ -25,25 +23,25 @@ func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 			log.Printf("Error occured when marshalling %v\n", err)
 			return
 		}
-		fmt.Println("get posts: ", string(result))
+		// fmt.Println("get posts: ", string(result))
 		w.Write(result)
 
-	case "POST":
-		var post *entity.Post
-		data, err := ioutil.ReadAll(r.Body)
-		defer r.Body.Close()
-		if err != nil {
-			log.Printf("error reading body %v\n", err)
-		}
-		err = json.Unmarshal(data, &post)
-		if err != nil {
-			log.Printf("error unmarshaling %v\n", err)
-		}
-		post.UserID = r.Context().Value(CtxReqIdKey).(string)
-		err = h.UseCases.Post.Create(post)
-		if err != nil {
-			log.Printf("error adding post in handler: %v\n", err)
-		}
-		fmt.Println("post from client:", post)
+		// case "POST":
+		// 	var post *entity.Post
+		// 	data, err := ioutil.ReadAll(r.Body)
+		// 	defer r.Body.Close()
+		// 	if err != nil {
+		// 		log.Printf("error reading body %v\n", err)
+		// 	}
+		// 	err = json.Unmarshal(data, &post)
+		// 	if err != nil {
+		// 		log.Printf("error unmarshaling %v\n", err)
+		// 	}
+		// 	post.UserID = r.Context().Value(CtxReqIdKey).(string)
+		// 	err = h.UseCases.Post.Create(post)
+		// 	if err != nil {
+		// 		log.Printf("error adding post in handler: %v\n", err)
+		// 	}
+		// 	// fmt.Println("post from client:", post)
 	}
 }

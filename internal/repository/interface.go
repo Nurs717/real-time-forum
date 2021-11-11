@@ -14,8 +14,8 @@ type Users interface {
 }
 
 type Post interface {
-	Create(post *entity.Post) error
-	FindAll() ([]entity.Post, error)
+	CreatePost(post *entity.Post) error
+	GetAllPosts() ([]entity.Post, error)
 }
 
 type Comment interface {

@@ -16,8 +16,8 @@ func NewPostRepo(db *sql.DB) *PostRepo {
 	}
 }
 
-func (r *PostRepo) Create(post *entity.Post) error {
-	postSQL, err := r.db.Exec("INSERT INTO Post (Body, Title, User_ID, Date, Category) VALUES (?, ?, ?, ?, ?)", post.Body, post.Title, post.UserID, post.PostDate, post.Category)
+func (r *PostRepo) CreatePost(post *entity.Post) error {
+	postSQL, err := r.db.Exec("INSERT INTO Post (Body, Title, User_ID, Date) VALUES (?, ?, ?, ?)", post.Body, post.Title, post.UserID, post.PostDate)
 	if err != nil {
 		log.Printf("error occured adding post to db: %v", err)
 		return err
@@ -28,29 +28,33 @@ func (r *PostRepo) Create(post *entity.Post) error {
 		log.Printf("error ocured when getting id from sql result table post: %v", err)
 		return err
 	}
-	_, err = r.db.Exec("INSERT OR IGNORE INTO Category (NAME) VALUES (?)", post.Category)
-	if err != nil {
-		log.Printf("error ocured when inserting categories in to table: %v", err)
-	}
-	_, err = r.db.Exec("INSERT INTO Category_Map (Post_ID, Category_ID) VALUES (?, ?)", id, post.Category)
-	if err != nil {
-		log.Printf("error occured adding post to db: %v", err)
-		return err
+	for _, category := range post.Category {
+		if category != "" {
+			_, err = r.db.Exec("INSERT OR IGNORE INTO Category (NAME) VALUES (?)", category)
+			if err != nil {
+				log.Printf("error ocured when inserting categories in to table: %v", err)
+			}
+			_, err = r.db.Exec("INSERT INTO Category_Map (Post_ID, Category_ID) VALUES (?, ?)", id, category)
+			if err != nil {
+				log.Printf("error occured adding post to db: %v", err)
+				return err
+			}
+		}
 	}
 
 	return nil
 }
 
-func (r *PostRepo) FindAll() ([]entity.Post, error) {
+func (r *PostRepo) GetAllPosts() ([]entity.Post, error) {
 	posts := []entity.Post{}
-	post, err := r.db.Query("SELECT P.ID, P.Body, P.Date, P.Category FROM Post as P")
+	post, err := r.db.Query("SELECT P.ID, U.UserName, P.Title, P.Date FROM Post as P INNER JOIN Users as U ON U.ID = P.User_ID")
 	if err != nil {
 		log.Printf("error occured querying %v", err)
 		return nil, err
 	}
 	for post.Next() {
 		p := entity.Post{}
-		err := post.Scan(&p.ID, &p.Body, &p.PostDate, &p.Category)
+		err := post.Scan(&p.ID, &p.UserName, &p.Title, &p.PostDate)
 		if err != nil {
 			log.Printf("Error occured scanning Query %v\n", err)
 			return nil, err

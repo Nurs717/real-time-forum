@@ -58,7 +58,6 @@ func (u *UserUseCase) SetCookie(user *entity.User) (*http.Cookie, error) {
 	cookie := &http.Cookie{
 		Name:     "session",
 		Value:    u1.String(),
-		Path:     "/",
 		Expires:  expire,
 		SameSite: http.SameSiteLaxMode,
 	}
