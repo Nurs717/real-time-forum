@@ -16,10 +16,6 @@ func (h *Handler) LogIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// fmt.Println(r.Cookie("session"))
-	// _, err := r.Cookie("session")
-	// if err == nil {
-	// 	return
-	// }
 	switch r.Method {
 	case "POST":
 		var user *entity.User

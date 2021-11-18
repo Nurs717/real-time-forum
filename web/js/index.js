@@ -1,4 +1,4 @@
-import Posts from "./views/Posts.js";
+import MainPage from "./views/MainPage.js";
 import AddPost from "./views/AddPost.js";
 import SignUp from "./views/SignUp.js";
 import LogIn from "./views/LogIn.js";
@@ -15,7 +15,7 @@ const navigateTo = url => {
 const router = async() => {
     // console.log(pathToRegex("/posts/:id"))
     const routes = [
-        { path: "/", view: Posts },
+        { path: "/", view: MainPage },
         { path: "/create-post", view: AddPost },
         { path: "/signup", view: SignUp },
         { path: "/login", view: LogIn },

@@ -1,3 +1,65 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Open+Sans+Condensed:300,700);
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+header {
+    margin: 0;
+    border-bottom: 3px solid hsl(195, 73%, 58%);
+}
+
+.row.mt {
+    margin-top: 1.25em;
+    box-sizing: border-box;
+}
+
+.lpad {
+    padding: 20px;
+}
+
+nav.menu a {
+    margin: 0 7px;
+    color: hsl(0, 0%, 70%);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.forum-head>.column {
+    background-color: hsl(206, 35%, 13%);
+    border-right: 1px solid hsl(212, 35%, 15%);
+    border-left: 1px solid hsl(212, 28%, 12%);
+    color: hsl(0, 0%, 100%);
+    font-weight: 300;
+    font-size: 12px;
+    text-shadow: 0 1px 1px hsl(0, 0%, 0%);
+    text-align: center;
+}
+
+.ar {
+    text-align: right;
+}
+
+.logo {
+    color: hsl(0, 0%, 70%);
+    font-size: 24px;
+}
+
+.posts {
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+}
+
+
+/* 
+
+
+
+
+
+
 body {
     --nav-width: 200px;
     margin: 0 0 0 var(--nav-width);
@@ -233,4 +295,4 @@ body {
 
 #checkboxes label:hover {
     background-color: #1e90ff;
-}
+} */

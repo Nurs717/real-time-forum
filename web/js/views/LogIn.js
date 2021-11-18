@@ -1,5 +1,5 @@
 import AbstractView from "./AbstractView.js";
-import Post from "./Posts.js";
+import MainPage from "./MainPage.js";
 
 export default class extends AbstractView {
     constructor() {
@@ -9,6 +9,22 @@ export default class extends AbstractView {
 
     async getHtml() {
         return `
+        <header id="#top">
+            <div class="row">
+                <div class="column lpad">
+                    <div class="logo">
+                        <span>MyForum</span>
+                    </div>
+                </div>
+                <div class="column ar lpad">
+                    <nav class="menu">
+                        <a href="/" id="h_posts" class="current nav_link" data-link>Posts</a>
+                        <a href="/create-post" data-link>New Post</a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
         <h1>Login</h1>
         <form id="loginInputForm" onSubmit="return false;">
         <div>
@@ -47,10 +63,11 @@ export default class extends AbstractView {
         }).then(async(resp) => {
             console.log("login resp:", resp.status)
             if (resp.status == 202) {
-                window.history.pushState("", "", '/');
-                var view = new Post;
-                document.querySelector("#app").innerHTML = await view.getHtml();
-                view.getPosts();
+                // window.history.pushState("", "", '/');
+                // var view = new MainPage;
+                // document.querySelector("#app").innerHTML = await view.getHtml();
+                // view.getPosts();
+                document.getElementById("h_posts").click();
                 return
             }
             console.log(resp.status)
@@ -73,9 +90,9 @@ export default class extends AbstractView {
                 .then(async(resp) => {
                     if (resp.ok) {
                         window.history.pushState("", "", '/');
-                        var view = new Post;
+                        let view = new MainPage;
                         document.querySelector("#app").innerHTML = await view.getHtml();
-                        view.getPosts();
+                        view.Init();
                     } else if (resp.status == 401) {
                         document.getElementById("invalid_user").innerHTML = "invalid user or password"
                     }

@@ -10,10 +10,12 @@ import (
 func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 	// fmt.Println(r.Cookie("session"))
 	fmt.Println("id from middleware", r.Context().Value(CtxReqIdKey))
-	// fmt.Println(CtxReqIdKey)
+	if r.Context().Value(CtxReqIdKey) == "Guest" {
+		w.WriteHeader(http.StatusForbidden)
+	}
 	switch r.Method {
 	case "GET":
-		posts, err := h.UseCases.Post.GetAllPosts()
+		posts, err := h.UseCases.GetAllPosts()
 		if err != nil {
 			log.Printf("Error occured %v\n", err)
 			return
@@ -25,23 +27,5 @@ func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 		}
 		// fmt.Println("get posts: ", string(result))
 		w.Write(result)
-
-		// case "POST":
-		// 	var post *entity.Post
-		// 	data, err := ioutil.ReadAll(r.Body)
-		// 	defer r.Body.Close()
-		// 	if err != nil {
-		// 		log.Printf("error reading body %v\n", err)
-		// 	}
-		// 	err = json.Unmarshal(data, &post)
-		// 	if err != nil {
-		// 		log.Printf("error unmarshaling %v\n", err)
-		// 	}
-		// 	post.UserID = r.Context().Value(CtxReqIdKey).(string)
-		// 	err = h.UseCases.Post.Create(post)
-		// 	if err != nil {
-		// 		log.Printf("error adding post in handler: %v\n", err)
-		// 	}
-		// 	// fmt.Println("post from client:", post)
 	}
 }
