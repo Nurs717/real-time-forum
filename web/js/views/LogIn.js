@@ -89,10 +89,11 @@ export default class extends AbstractView {
             fetch(req)
                 .then(async(resp) => {
                     if (resp.ok) {
-                        window.history.pushState("", "", '/');
-                        let view = new MainPage;
-                        document.querySelector("#app").innerHTML = await view.getHtml();
-                        view.Init();
+                        // window.history.pushState("", "", '/');
+                        // let view = new MainPage;
+                        // document.querySelector("#app").innerHTML = await view.getHtml();
+                        // view.Init();
+                        document.getElementById("h_posts").click();
                     } else if (resp.status == 401) {
                         document.getElementById("invalid_user").innerHTML = "invalid user or password"
                     }

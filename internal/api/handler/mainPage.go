@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"rtforum/internal/entity"
 )
 
 func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
@@ -15,10 +16,22 @@ func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 	}
 	switch r.Method {
 	case "GET":
-		posts, err := h.UseCases.GetAllPosts()
-		if err != nil {
-			log.Printf("Error occured %v\n", err)
-			return
+		var posts []entity.Post
+		var err error
+		category := r.FormValue("category")
+		fmt.Println("category:", category)
+		if category == "" {
+			posts, err = h.UseCases.GetAllPosts()
+			if err != nil {
+				log.Printf("Error occured in handler getAllPosts: %v\n", err)
+				return
+			}
+		} else {
+			posts, err = h.UseCases.GetPostsByCategory()
+			if err != nil {
+				log.Printf("Error occured in handler getPostsByCategory: %v\n", err)
+				return
+			}
 		}
 		result, err := json.Marshal(posts)
 		if err != nil {
@@ -27,5 +40,7 @@ func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 		}
 		// fmt.Println("get posts: ", string(result))
 		w.Write(result)
+	case "POST":
+
 	}
 }
