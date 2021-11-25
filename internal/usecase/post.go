@@ -52,3 +52,12 @@ func (u *PostUseCase) GetAllPosts() ([]entity.Post, error) {
 	}
 	return posts, nil
 }
+
+func (u *PostUseCase) GetPostsByCategory(category string) ([]entity.Post, error) {
+	posts, err := u.repo.GetPostsByCategory(category)
+	if err != nil {
+		log.Printf("Error occured in usecase getpostbycategory: %v", err)
+		return nil, err
+	}
+	return posts, nil
+}

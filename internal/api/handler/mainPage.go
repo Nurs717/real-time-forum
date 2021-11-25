@@ -27,7 +27,7 @@ func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		} else {
-			posts, err = h.UseCases.GetPostsByCategory()
+			posts, err = h.UseCases.GetPostsByCategory(category)
 			if err != nil {
 				log.Printf("Error occured in handler getPostsByCategory: %v\n", err)
 				return

@@ -86,15 +86,16 @@ async function drawCategories() {
     categories.setAttribute('class', 'column lpad top-msg breadcrumb');
     categories.setAttribute('id', 'breadcrumb');
     let sport = document.createElement('button');
-    sport.setAttribute('id', 'myBtn');
-    sport.setAttribute('value', 'sport')
+    sport.setAttribute('value', 'sport');
     sport.setAttribute('my-button', '');
     sport.innerHTML = 'sport';
     let religion = document.createElement('button');
+    religion.setAttribute('value', 'religion');
     religion.setAttribute('my-button', '');
     religion.innerHTML = 'religion';
     let programming = document.createElement('button');
     programming.setAttribute('my-button', '');
+    programming.setAttribute('value', 'programming');
     programming.innerHTML = 'programming'
     categories.appendChild(sport);
     categories.appendChild(religion);
@@ -135,8 +136,11 @@ export default class extends AbstractView {
         getPosts(url);
 
         const button = document.getElementById('app');
-        button.addEventListener("click", e => {
+        button.addEventListener("click", async(e) => {
+            e.preventDefault();
             if (e.target.matches("[my-button]")) {
+                button.innerHTML = "";
+                button.innerHTML = await this.getHtml();
                 url.searchParams.set('category', e.target.value);
                 getPosts(url);
                 console.log(url.href)

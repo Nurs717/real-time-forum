@@ -49,7 +49,26 @@ func (r *PostRepo) GetAllPosts() ([]entity.Post, error) {
 	posts := []entity.Post{}
 	post, err := r.db.Query("SELECT P.ID, U.UserName, P.Title, P.Date FROM Post as P INNER JOIN Users as U ON U.ID = P.User_ID")
 	if err != nil {
-		log.Printf("error occured querying %v", err)
+		log.Printf("error occured querying db: %v", err)
+		return nil, err
+	}
+	for post.Next() {
+		p := entity.Post{}
+		err := post.Scan(&p.ID, &p.UserName, &p.Title, &p.PostDate)
+		if err != nil {
+			log.Printf("Error occured scanning Query %v\n", err)
+			return nil, err
+		}
+		posts = append(posts, p)
+	}
+	return posts, nil
+}
+
+func (r *PostRepo) GetPostsByCategory(category string) ([]entity.Post, error) {
+	posts := []entity.Post{}
+	post, err := r.db.Query("SELECT P.ID, U.UserName, P.Title, P.Date FROM Post as P INNER JOIN Users as U ON U.ID = P.User_ID INNER JOIN Category_Map as Map ON Map.Category_ID = Category.NAME INNER JOIN Category ON Map.Post_ID = P.ID WHERE Category.NAME = ?", category)
+	if err != nil {
+		log.Printf("error occured querying db: %v", err)
 		return nil, err
 	}
 	for post.Next() {

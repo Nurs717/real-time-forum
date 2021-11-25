@@ -16,6 +16,7 @@ type Post interface {
 	Validate(post *entity.Post) error
 	Create(post *entity.Post) error
 	GetAllPosts() ([]entity.Post, error)
+	GetPostsByCategory(category string) ([]entity.Post, error)
 }
 
 type Comments interface {
