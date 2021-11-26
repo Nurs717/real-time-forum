@@ -1,5 +1,4 @@
 import AbstractView from "./AbstractView.js";
-import MainPage from "./MainPage.js";
 
 export default class extends AbstractView {
     constructor() {
@@ -48,59 +47,54 @@ export default class extends AbstractView {
 
 
     async Init() {
-        this.logIn();
+        logIn();
     }
+}
 
-    async logIn() {
-        const url = "http://localhost:8080/login"
+async function logIn() {
+    const url = "http://localhost:8080/login"
 
-        var inputForm = document.getElementById("loginInputForm")
+    fetch(url, {
+        mode: 'cors',
+        method: 'POST',
+        credentials: 'include',
+    }).then(async(resp) => {
+        console.log("login resp:", resp.status)
+        if (resp.status == 202) {
+            document.getElementById("h_posts").click();
+        }
+    })
+
+    var inputForm = document.getElementById("loginInputForm")
+    console.log(inputForm)
+
+    inputForm.addEventListener('submit', (event) => {
+        //prevent auto submission
+        event.preventDefault();
+
+        const formdata = new FormData(inputForm)
 
         fetch(url, {
-            mode: 'cors',
-            method: 'POST',
-            credentials: 'include',
-        }).then(async(resp) => {
-            console.log("login resp:", resp.status)
-            if (resp.status == 202) {
-                // window.history.pushState("", "", '/');
-                // var view = new MainPage;
-                // document.querySelector("#app").innerHTML = await view.getHtml();
-                // view.getPosts();
-                document.getElementById("h_posts").click();
-                return
-            }
-            console.log(resp.status)
-        })
-
-        inputForm.addEventListener("submit", (e) => {
-            //prevent auto submission
-            e.preventDefault()
-
-            const formdata = new FormData(inputForm)
-
-
-            let req = new Request(url, {
                 mode: 'cors',
                 method: 'POST',
                 credentials: 'include',
-                body: JSON.stringify({ email: formdata.get("email"), password: formdata.get("password") }),
+                body: JSON.stringify({ email: formdata.get("email"), password: formdata.get("password") })
+            })
+            .then(async(resp) => {
+
+                console.log("log", resp.status)
+                if (resp.ok) {
+                    // window.history.pushState("", "", '/');
+                    // let view = new MainPage;
+                    // document.querySelector("#app").innerHTML = await view.getHtml();
+                    // view.Init();
+                    document.getElementById("h_posts").click();
+                } else if (resp.status == 401) {
+                    document.getElementById("invalid_user").innerHTML = "invalid user or password"
+                }
+            })
+            .catch((err) => {
+                console.error(err);
             });
-            fetch(req)
-                .then(async(resp) => {
-                    if (resp.ok) {
-                        // window.history.pushState("", "", '/');
-                        // let view = new MainPage;
-                        // document.querySelector("#app").innerHTML = await view.getHtml();
-                        // view.Init();
-                        document.getElementById("h_posts").click();
-                    } else if (resp.status == 401) {
-                        document.getElementById("invalid_user").innerHTML = "invalid user or password"
-                    }
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        })
-    }
+    });
 }

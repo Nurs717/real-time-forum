@@ -1,7 +1,6 @@
 import AbstractView from "./AbstractView.js";
 
 async function getPosts(url) {
-    // document.cookie = 'session=; Max-Age=-1;';
     // const url = new URL(window.location.href);
     fetch(url.href, {
         method: "GET",
@@ -27,8 +26,10 @@ async function getPosts(url) {
         (data) => {
             console.log('hello', data);
             let app = document.getElementById("app");
-            let username = document.getElementById('welcome_username');
-            username.innerHTML = data[0].username;
+            if (document.cookie != "") {
+                let username = document.getElementById('welcome_username');
+                username.innerHTML = data[0].username;
+            }
             let posts = document.createElement("div");
             posts.setAttribute('id', 'posts');
             app.appendChild(posts);
@@ -48,7 +49,7 @@ async function drawNavMenuLoggedIn() {
     newPost.setAttribute('data-link', '');
     newPost.innerHTML = 'New Post';
     let logout = document.createElement('button');
-    logout.setAttribute('my-button', '');
+    logout.setAttribute('logout-button', '');
     logout.innerHTML = 'Log Out';
     menu[0].appendChild(newPost);
     menu[0].appendChild(logout);
@@ -87,14 +88,14 @@ async function drawCategories() {
     categories.setAttribute('id', 'breadcrumb');
     let sport = document.createElement('button');
     sport.setAttribute('value', 'sport');
-    sport.setAttribute('my-button', '');
+    sport.setAttribute('category-button', '');
     sport.innerHTML = 'sport';
     let religion = document.createElement('button');
     religion.setAttribute('value', 'religion');
-    religion.setAttribute('my-button', '');
+    religion.setAttribute('category-button', '');
     religion.innerHTML = 'religion';
     let programming = document.createElement('button');
-    programming.setAttribute('my-button', '');
+    programming.setAttribute('category-button', '');
     programming.setAttribute('value', 'programming');
     programming.innerHTML = 'programming'
     categories.appendChild(sport);
@@ -121,7 +122,7 @@ export default class extends AbstractView {
                 </div>
                 <div class="column ar lpad">
                     <nav class="menu">
-                        <a href="/" class="current nav_link" data-link>Posts</a>
+                        <a href="/" id="h_posts" class="current nav_link" data-link>Posts</a>
                     </nav>
                 </div>
             </div>
@@ -138,12 +139,17 @@ export default class extends AbstractView {
         const button = document.getElementById('app');
         button.addEventListener("click", async(e) => {
             e.preventDefault();
-            if (e.target.matches("[my-button]")) {
+            if (e.target.matches("[category-button]")) {
                 button.innerHTML = "";
                 button.innerHTML = await this.getHtml();
                 url.searchParams.set('category', e.target.value);
                 getPosts(url);
                 console.log(url.href)
+                e.stopImmediatePropagation();
+            } else if (e.target.matches("[logout-button]")) {
+                document.cookie = 'session=; Max-Age=-1;';
+                document.getElementById("h_posts").click();
+                e.stopImmediatePropagation();
             }
         });
     }
