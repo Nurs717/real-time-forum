@@ -113,7 +113,7 @@ export default class extends AbstractView {
 
     async getHtml() {
         return `
-        <header id="#top">
+        <header id="top">
             <div class="row">
                 <div class="column lpad">
                     <div class="logo">
@@ -136,15 +136,15 @@ export default class extends AbstractView {
         let url = new URL("http://localhost:8080/");
         getPosts(url);
 
-        const button = document.getElementById('app');
+        const button = document.getElementById("app");
         button.addEventListener("click", async(e) => {
-            e.preventDefault();
+            e.composedPath();
             if (e.target.matches("[category-button]")) {
                 button.innerHTML = "";
                 button.innerHTML = await this.getHtml();
                 url.searchParams.set('category', e.target.value);
                 getPosts(url);
-                console.log(url.href)
+                console.log(url.href);
                 e.stopImmediatePropagation();
             } else if (e.target.matches("[logout-button]")) {
                 document.cookie = 'session=; Max-Age=-1;';

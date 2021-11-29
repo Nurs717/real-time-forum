@@ -118,12 +118,27 @@ const router = async() => {
 window.addEventListener("popstate", router);
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.body.addEventListener("click", e => {
+    document.body.addEventListener("click", function mainListener(e) {
         if (e.target.matches("[data-link]")) {
             e.preventDefault();
             navigateTo(e.target.href);
         }
     });
+
+    // document.addEventListener('click', function(event) {
+    //     console.log(
+    //         event.type, // The type of the event
+    //         event.target, // The target of the event
+    //         event, // The event itself
+    //         (() => {
+    //             try {
+    //                 throw new Error();
+    //             } catch (e) {
+    //                 return e;
+    //             }
+    //         })() // A stacktrace to figure out what triggered the event
+    //     );
+    // }, true);
 
     router();
 })

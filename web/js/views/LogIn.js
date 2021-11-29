@@ -65,10 +65,11 @@ async function logIn() {
         }
     })
 
-    var inputForm = document.getElementById("loginInputForm")
-    console.log(inputForm)
+    var doc = document.getElementById("app");
+    var inputForm = document.getElementById("loginInputForm");
+    console.log(inputForm);
 
-    inputForm.addEventListener('submit', (event) => {
+    doc.addEventListener('submit', (event) => {
         //prevent auto submission
         event.preventDefault();
 
