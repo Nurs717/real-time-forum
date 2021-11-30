@@ -25,6 +25,7 @@ func (h *Handler) LogIn(w http.ResponseWriter, r *http.Request) {
 			log.Printf("error reading body %v\n", err)
 		}
 		err = json.Unmarshal(data, &user)
+		fmt.Println("user login", user)
 		if user == nil {
 			return
 		}

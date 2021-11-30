@@ -12,31 +12,31 @@ async function getPosts(url) {
                 drawNavMenuLoggedIn();
                 //draw username
                 drawWelcomUserName();
-                //draw categories
-                drawCategories();
             } else {
                 // draw nav menu logged out
                 drawNavmenuLoggedOut();
-                //draw categories
-                drawCategories();
             }
+            //draw categories
+            drawCategories();
+            //draw posts
+            drawPosts();
             return response.json()
         }
     ).then(
         (data) => {
-            console.log('hello', data);
-            let app = document.getElementById("app");
+            console.log('posts:', data);
+            let app = document.getElementById("posts");
             if (document.cookie != "") {
                 let username = document.getElementById('welcome_username');
                 username.innerHTML = data[0].username;
             }
-            let posts = document.createElement("div");
-            posts.setAttribute('id', 'posts');
-            app.appendChild(posts);
             data.map(post => {
                 let line = document.createElement('p');
-                line.innerText = 'username: ' + post.username + ' title: ' + post.post_title;
-                posts.appendChild(line);
+                let line2 = document.createElement('p');
+                line.innerText = 'username: ' + post.username;
+                line2.innerText = ' title: ' + post.post_title;
+                app.appendChild(line);
+                app.appendChild(line2)
             })
         }
     )
@@ -104,6 +104,14 @@ async function drawCategories() {
     row[1].appendChild(categories);
 }
 
+async function drawPosts() {
+    let app = document.getElementById("app");
+    let posts = document.createElement("div");
+    posts.setAttribute('id', 'posts');
+    posts.setAttribute('class', 'row mt')
+    app.appendChild(posts);
+}
+
 export default class extends AbstractView {
     constructor() {
         super();
@@ -144,7 +152,6 @@ export default class extends AbstractView {
                 button.innerHTML = await this.getHtml();
                 url.searchParams.set('category', e.target.value);
                 getPosts(url);
-                console.log(url.href);
                 e.stopImmediatePropagation();
             } else if (e.target.matches("[logout-button]")) {
                 document.cookie = 'session=; Max-Age=-1;';

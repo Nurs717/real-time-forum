@@ -99,7 +99,7 @@ const router = async() => {
     });
 
     let match = potentialMatches.find(potentialMatch => potentialMatch.result !== null);
-    console.log("match:", match);
+    // console.log("match:", match);
 
     if (!match) {
         match = {
