@@ -25,18 +25,40 @@ async function getPosts(url) {
     ).then(
         (data) => {
             console.log('posts:', data);
-            let app = document.getElementById("posts");
+            let t_body = document.getElementById("tbody");
             if (document.cookie != "") {
                 let username = document.getElementById('welcome_username');
                 username.innerHTML = data[0].username;
             }
             data.map(post => {
-                let line = document.createElement('p');
-                let line2 = document.createElement('p');
-                line.innerText = 'username: ' + post.username;
-                line2.innerText = ' title: ' + post.post_title;
-                app.appendChild(line);
-                app.appendChild(line2)
+                let tr = document.createElement("tr");
+                if (post.ID % 2 == 0) {
+                    tr.setAttribute('class', 'even');
+                } else {
+                    tr.setAttribute('class', 'odd');
+                }
+                let td_topic = document.createElement("td");
+                let a_topic = document.createElement("a");
+                a_topic.setAttribute("href", "");
+                a_topic.innerText = post.post_title;
+                td_topic.appendChild(a_topic);
+                let td_categories = document.createElement("td");
+                let div_categories = document.createElement("div");
+                div_categories.innerText = "Sport, Religon";
+                td_categories.appendChild(div_categories);
+                let td_comments = document.createElement("td");
+                let div_comments = document.createElement("div");
+                div_comments.innerText = 2;
+                td_comments.appendChild(div_comments);
+                let td_created = document.createElement("td");
+                let div_created = document.createElement("div");
+                div_created.innerText = "by " + post.username + "\n" + post.post_date;
+                td_created.appendChild(div_created);
+                tr.appendChild(td_topic);
+                tr.appendChild(td_categories);
+                tr.appendChild(td_comments);
+                tr.appendChild(td_created);
+                t_body.appendChild(tr);
             })
         }
     )
@@ -108,7 +130,33 @@ async function drawPosts() {
     let app = document.getElementById("app");
     let posts = document.createElement("div");
     posts.setAttribute('id', 'posts');
-    posts.setAttribute('class', 'row mt')
+    posts.setAttribute('class', 'row mt');
+    let table = document.createElement("table");
+    table.setAttribute('class', 'table');
+    let table_head = document.createElement("thead");
+    let tr_head = document.createElement("tr");
+    let th_topic = document.createElement("th");
+    th_topic.style = "width:60%";
+    th_topic.innerHTML = "Topic";
+    let th_comments = document.createElement("th");
+    th_comments.style = "width:10%";
+    th_comments.innerHTML = "Comments";
+    let th_created = document.createElement("th");
+    th_created.style = "width:15%";
+    th_created.innerHTML = "Created";
+    let th_categories = document.createElement("th");
+    th_categories.style = "width:15%"
+    th_categories.innerHTML = "Categories";
+    tr_head.appendChild(th_topic);
+    tr_head.appendChild(th_categories);
+    tr_head.appendChild(th_comments);
+    tr_head.appendChild(th_created);
+    table_head.appendChild(tr_head);
+    let table_body = document.createElement("tbody");
+    table_body.setAttribute('id', 'tbody')
+    table.appendChild(table_head);
+    table.appendChild(table_body);
+    posts.appendChild(table);
     app.appendChild(posts);
 }
 
