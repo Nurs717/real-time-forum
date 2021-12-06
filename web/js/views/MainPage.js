@@ -38,8 +38,10 @@ async function getPosts(url) {
                     tr.setAttribute('class', 'odd');
                 }
                 let td_topic = document.createElement("td");
+                td_topic.style = "padding-left: 25px; padding-right: 15px; text-align: justify;"
                 let a_topic = document.createElement("a");
-                a_topic.setAttribute("href", "");
+                a_topic.setAttribute("href", `http://localhost:8081/post/${post.ID}`);
+                a_topic.setAttribute("data-link", "")
                 a_topic.innerText = post.post_title;
                 td_topic.appendChild(a_topic);
                 let td_categories = document.createElement("td");
@@ -52,7 +54,7 @@ async function getPosts(url) {
                 td_comments.appendChild(div_comments);
                 let td_created = document.createElement("td");
                 let div_created = document.createElement("div");
-                div_created.innerText = "by " + post.username + "\n" + post.post_date;
+                div_created.innerText = `by ${post.username}\n${post.post_date}`;
                 td_created.appendChild(div_created);
                 tr.appendChild(td_topic);
                 tr.appendChild(td_categories);
@@ -164,7 +166,6 @@ export default class extends AbstractView {
     constructor() {
         super();
         this.setTitle("MyForum");
-        this.myUrl = "http://localhost:8080/";
     }
 
     async getHtml() {
@@ -173,7 +174,7 @@ export default class extends AbstractView {
             <div class="row">
                 <div class="column lpad">
                     <div class="logo">
-                        <span>MyForum</span>
+                        <a href="http://localhost:8081/" data-link>MyForum</a>
                     </div>
                 </div>
                 <div class="column ar lpad">
