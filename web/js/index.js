@@ -24,13 +24,13 @@ const navigateTo = url => {
 }
 
 const router = async() => {
-    // console.log(pathToRegex("/posts/:id"))
+    console.log("sdsd", pathToRegex("/posts/[0-9]+"))
     const routes = [
         { path: "/", view: MainPage },
         { path: "/create-post", view: AddPost },
         { path: "/signup", view: SignUp },
         { path: "/login", view: LogIn },
-        { path: "/post/", view: Post },
+        { path: "/post/[0-9]+", view: Post },
     ];
 
     const potentialMatches = routes.map(route => {

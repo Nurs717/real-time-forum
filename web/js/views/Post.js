@@ -28,8 +28,8 @@ export default class extends AbstractView {
     }
 
     async Init() {
-        let url = new URL("http://localhost:8080/post/");
-        // getPosts(url);
-        console.log(url)
+        let id = window.location.pathname.replace("/post/", "");
+        let url = new URL(`http://localhost:8080/post/${id}`);
+        console.log("post worked", url.href)
     }
 }
