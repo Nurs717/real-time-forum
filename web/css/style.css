@@ -118,6 +118,10 @@ button.underline:hover:after {
     }
 }
 
+#app {
+    height: max-content;
+}
+
 .posts {
     margin: auto;
     display: flex;
@@ -126,15 +130,13 @@ button.underline:hover:after {
 }
 
 table {
-    border-collapse: collapse;
+    border-collapse: separate;
     width: 99%;
     margin-left: auto;
     margin-right: auto;
     border-color: inherit;
-}
-
-table {
     border: 1px solid gray;
+    border-radius: 10px;
 }
 
 .table {
@@ -156,6 +158,11 @@ thead tr {
     background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(hsl(195, 73%, 58%)));
 }
 
+th,
+tr {
+    border-radius: 5px;
+}
+
 tr.even,
 tr.odd {
     border-bottom: 1px solid #CCC;
@@ -170,6 +177,95 @@ tbody {
     font-size: 12px;
     text-align: center;
 }
+
+
+/* post page */
+
+
+/* post container */
+
+#container {
+    position: relative;
+    right: -35px;
+    top: 35px;
+    padding: 5px;
+    width: 75%;
+    background-color: rgb(227, 242, 255);
+    /* background-color: rgb(243, 243, 243); */
+    border-radius: 10px;
+}
+
+.like-plus {
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-bottom: 14px solid hsl(195, 73%, 58%);
+}
+
+.like-minus {
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-top: 14px solid hsl(195, 73%, 58%);
+}
+
+.like-box {
+    width: 5%;
+    height: 50px;
+    margin: 15px 5px 5px 5px;
+    float: left;
+    text-align: center;
+    padding: 4px;
+}
+
+#like {}
+
+.post-box {
+    display: table;
+}
+
+#title {
+    float: left;
+    width: 96%;
+    /* background-color: greenyellow; */
+    margin: 10px;
+    padding: 5px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.hr-box {
+    float: left;
+    width: 96%;
+    margin: -5px 15px 15px 15px;
+    height: 1px;
+    color: hsl(0, 0%, 40%);
+}
+
+#post-body {
+    width: 96%;
+    float: left;
+    margin: 10px;
+    padding: 5px;
+    /* background-color: red; */
+}
+
+#author {
+    float: right;
+    margin: 10px;
+    font-size: 14px;
+    /* background-color: blue; */
+}
+
+
+/* //post container */
+
+
+/* create comment container */
+
+
+/* //create comment container */
+
+
+/* // post page */
 
 
 /* 
