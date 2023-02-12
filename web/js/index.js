@@ -24,7 +24,7 @@ const navigateTo = url => {
 }
 
 const router = async() => {
-    console.log("sdsd", pathToRegex("/posts/[0-9]+"))
+    // console.log("sdsd", pathToRegex("/posts/[0-9]+"))
     const routes = [
         { path: "/", view: MainPage },
         { path: "/create-post", view: AddPost },

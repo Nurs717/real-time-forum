@@ -10,5 +10,6 @@ func (h *Handler) Router() *http.ServeMux {
 	mux.HandleFunc("/login", EnableCORS(h.CheckCookie(h.LogIn)))
 	mux.HandleFunc("/create-post", EnableCORS(h.CheckCookie(h.CreatPost)))
 	mux.HandleFunc("/signup", EnableCORS(h.SignUp))
+	mux.HandleFunc("/post/", EnableCORS(h.CheckCookie(h.PostAndComments)))
 	return mux
 }

@@ -31,24 +31,90 @@ export default class extends AbstractView {
         let id = window.location.pathname.replace("/post/", "");
         let url = new URL(`http://localhost:8080/post/${id}`);
         console.log("post worked", url.href)
-        let app = document.getElementById('app');
-        let container = document.createElement('div');
-        container.setAttribute('id', 'container');
-        app.appendChild(container);
-        drawPostPage();
+        getPostPage(url.href);
     }
 }
 
-async function drawPostPage() {
+async function getPostPage(url) {
+    fetch(url, {
+        method: "GET",
+        credentials: 'include'
+    }).then(
+        (response) => {
+            let app = document.getElementById('app');
+            let container = document.createElement('div');
+            container.setAttribute('id', 'container');
+            app.appendChild(container);
+            if (response.ok) {
+                // draw nav menu
+                drawNavMenuLoggedIn();
+                //draw username
+                drawWelcomUserName();
+                //draw post container
+                drawPostContainer();
+                //draw create comment container
+                drawCreateCommentContainer();
+            } else {
+                // draw nav menu logged out
+                drawNavmenuLoggedOut();
+                //draw post container
+                drawPostContainer();
+            }
+            //draw comments container
+            drawCommentsContainer();
+            return response.json()
+        }
+    )
+}
+
+async function drawNavMenuLoggedIn() {
+    let menu = document.getElementsByClassName("menu");
+    let newPost = document.createElement('a');
+    newPost.setAttribute('href', '/create-post');
+    newPost.setAttribute('data-link', '');
+    newPost.innerHTML = 'New Post';
+    let logout = document.createElement('button');
+    logout.setAttribute('logout-button', '');
+    logout.innerHTML = 'Log Out';
+    menu[0].appendChild(newPost);
+    menu[0].appendChild(logout);
+}
+
+async function drawNavmenuLoggedOut() {
+    let menu = document.getElementsByClassName("menu");
+    let register = document.createElement('a');
+    register.setAttribute('href', '/signup');
+    register.setAttribute('data-link', '');
+    register.innerHTML = 'Register';
+    let login = document.createElement('a');
+    login.setAttribute('href', '/login');
+    login.setAttribute('data-link', '');
+    login.innerHTML = 'Log In';
+    menu[0].appendChild(register);
+    menu[0].appendChild(login);
+}
+
+async function drawWelcomUserName() {
+    let row = document.getElementsByClassName("row");
+    let username = document.createElement('div');
+    username.setAttribute('class', 'column lpad top-msg ar');
+    username.innerHTML = 'Welcome, ';
+    let welcome = document.createElement('a');
+    welcome.setAttribute('id', 'welcome_username')
+    welcome.setAttribute('class', 'underline');
+    username.appendChild(welcome);
+    row[1].appendChild(username);
+}
+
+async function drawPostContainer() {
     let container = document.getElementById('container');
-    // post contaner
     let post_container = document.createElement('div');
     post_container.setAttribute('class', 'post-container');
     let like_box = document.createElement('div');
     like_box.setAttribute('class', 'like-box');
     let like = document.createElement('div');
     like.setAttribute('id', 'like');
-    like.innerHTML = 'like';
+    like.innerHTML = -2;
     let like_plus = document.createElement('button');
     like_plus.setAttribute('class', 'like-plus');
     let like_minus = document.createElement('button');
@@ -75,7 +141,11 @@ async function drawPostPage() {
     post_box.appendChild(author);
     post_container.appendChild(like_box);
     post_container.appendChild(post_box);
-    //create-comment-contaner
+    container.appendChild(post_container);
+}
+
+async function drawCreateCommentContainer() {
+    let container = document.getElementById('container');
     let create_comment_container = document.createElement('form');
     create_comment_container.setAttribute('class', 'create-comment-container');
     let post_id = document.createElement('input');
@@ -96,7 +166,11 @@ async function drawPostPage() {
     submit_comment.setAttribute('class', 'submt-comment');
     submit_comment.innerHTML = "Add Your Comment";
     create_comment_container.appendChild(submit_comment);
-    //comments container
+    container.appendChild(create_comment_container);
+}
+
+async function drawCommentsContainer() {
+    let container = document.getElementById('container');
     let comments_container = document.createElement('div');
     comments_container.setAttribute('class', 'comments-container');
     let all_comments = document.createElement('div');
@@ -110,7 +184,7 @@ async function drawPostPage() {
     like_box_comment.setAttribute('class', 'like-box-comment')
     let like_comment = document.createElement('div');
     like_comment.setAttribute('id', 'like-comment');
-    like_comment.innerHTML = 'like';
+    like_comment.innerHTML = 14;
     let like_plus_comment = document.createElement('button');
     like_plus_comment.setAttribute('class', 'like-plus-comment');
     let like_minus_comment = document.createElement('button');
@@ -127,8 +201,5 @@ async function drawPostPage() {
     author_comment.setAttribute('class', 'author-comment');
     author_comment.innerHTML = "Commented 8 aug 2021 at 8:20\nby Nurs";
     comments_container.appendChild(author_comment);
-    //apend to post page container 
-    container.appendChild(post_container);
-    container.appendChild(create_comment_container);
     container.appendChild(comments_container);
 }
