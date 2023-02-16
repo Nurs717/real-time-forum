@@ -33,6 +33,7 @@ func (u *UserUseCase) NewUser(user *entity.User) error {
 	if err != nil {
 		return err
 	}
+
 	err = u.repo.NewUser(user)
 	if err != nil {
 		log.Printf("error occured usecase: %v\n", err)

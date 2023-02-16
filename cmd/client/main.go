@@ -19,6 +19,7 @@ func main() {
 	web := http.FileServer(http.Dir("./web"))
 	http.Handle("/web/", http.StripPrefix("/web/", web))
 	http.HandleFunc("/", indexHandler)
+	log.Printf("Client server has started at port: %s\n", config.CLIENT_PORT)
 	log.Fatal(http.ListenAndServe(config.CLIENT_PORT, nil))
 }
 
