@@ -3,7 +3,7 @@ package usecase
 import (
 	"fmt"
 	"log"
-	"rtforum/errors"
+	"rtforum/internal/cerror"
 	"rtforum/internal/entity"
 	"rtforum/internal/repository"
 	"time"
@@ -21,11 +21,11 @@ func NewPostUseCase(repo repository.Post) *PostUseCase {
 
 func (*PostUseCase) Validate(post *entity.Post) error {
 	if post == nil {
-		err := errors.ErrEmptyPost
+		err := cerror.ErrEmptyPost
 		return err
 	}
 	if post.Body == "" {
-		err := errors.ErrEmptyPost
+		err := cerror.ErrEmptyPost
 		return err
 	}
 	return nil

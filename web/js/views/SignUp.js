@@ -27,7 +27,7 @@ export default class extends AbstractView {
         </div>
         <div>
         <label for="password">Password</label>
-        <input id="password" name="" type="text">
+        <input id="password" name="password" type="text">
         </div>
         <div>
         <button type="submit" style="width:100px;">Register</button>
@@ -37,13 +37,13 @@ export default class extends AbstractView {
     }
 
     async Init() {
-        this.signUp();
+        await this.signUp();
     }
 
     async signUp() {
         const url = "http://localhost:8080/signup"
 
-        var inputForm = document.getElementById("signUpInputForm")
+        let inputForm = document.getElementById("signUpInputForm");
 
         inputForm.addEventListener("submit", (e) => {
 

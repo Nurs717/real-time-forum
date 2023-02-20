@@ -1,4 +1,4 @@
-package handler
+package rest
 
 import (
 	"encoding/json"
@@ -23,13 +23,13 @@ func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 		if category == "" {
 			posts, err = h.UseCases.GetAllPosts()
 			if err != nil {
-				log.Printf("Error occured in handler getAllPosts: %v\n", err)
+				log.Printf("Error occured in rest getAllPosts: %v\n", err)
 				return
 			}
 		} else {
 			posts, err = h.UseCases.GetPostsByCategory(category)
 			if err != nil {
-				log.Printf("Error occured in handler getPostsByCategory: %v\n", err)
+				log.Printf("Error occured in rest getPostsByCategory: %v\n", err)
 				return
 			}
 		}
@@ -39,6 +39,7 @@ func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// fmt.Println("get posts: ", string(result))
+		w.Header().Set("Content-Type", "application/json")
 		w.Write(result)
 	case "POST":
 

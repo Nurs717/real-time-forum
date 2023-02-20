@@ -11,7 +11,7 @@ async function getPosts(url) {
                 // draw nav menu
                 drawNavMenuLoggedIn();
                 //draw username
-                drawWelcomUserName();
+                drawWelcomeUserName();
             } else {
                 // draw nav menu logged out
                 drawNavmenuLoggedOut();
@@ -26,13 +26,13 @@ async function getPosts(url) {
         (data) => {
             console.log('posts:', data);
             let t_body = document.getElementById("tbody");
-            if (document.cookie != "") {
+            if (document.cookie !== "") {
                 let username = document.getElementById('welcome_username');
                 username.innerHTML = data[0].username;
             }
             data.map(post => {
                 let tr = document.createElement("tr");
-                if (post.ID % 2 == 0) {
+                if (post.ID % 2 === 0) {
                     tr.setAttribute('class', 'even');
                 } else {
                     tr.setAttribute('class', 'odd');
@@ -46,7 +46,7 @@ async function getPosts(url) {
                 td_topic.appendChild(a_topic);
                 let td_categories = document.createElement("td");
                 let div_categories = document.createElement("div");
-                div_categories.innerText = "Sport, Religon";
+                div_categories.innerText = "Sport, Religion";
                 td_categories.appendChild(div_categories);
                 let td_comments = document.createElement("td");
                 let div_comments = document.createElement("div");
@@ -93,7 +93,7 @@ async function drawNavmenuLoggedOut() {
     menu[0].appendChild(login);
 }
 
-async function drawWelcomUserName() {
+async function drawWelcomeUserName() {
     let row = document.getElementsByClassName("row");
     let username = document.createElement('div');
     username.setAttribute('class', 'column lpad top-msg ar');
@@ -104,6 +104,7 @@ async function drawWelcomUserName() {
     username.appendChild(welcome);
     row[1].appendChild(username);
 }
+
 
 async function drawCategories() {
     let row = document.getElementsByClassName('row')
@@ -200,7 +201,7 @@ export default class extends AbstractView {
                 button.innerHTML = "";
                 button.innerHTML = await this.getHtml();
                 url.searchParams.set('category', e.target.value);
-                getPosts(url);
+                await getPosts(url);
                 e.stopImmediatePropagation();
             } else if (e.target.matches("[logout-button]")) {
                 document.cookie = 'session=; Max-Age=-1;';

@@ -1,16 +1,16 @@
-package handler
+package rest
 
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"rtforum/internal/entity"
 )
 
 func (h *Handler) LogIn(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("login handler:", r.Context().Value(CtxReqIdKey))
+	fmt.Println("login rest:", r.Context().Value(CtxReqIdKey))
 	if r.Context().Value(CtxReqIdKey) != "Guest" {
 		w.WriteHeader(http.StatusAccepted)
 		return
@@ -19,7 +19,7 @@ func (h *Handler) LogIn(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 		var user *entity.User
-		data, err := ioutil.ReadAll(r.Body)
+		data, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if err != nil {
 			log.Printf("error reading body %v\n", err)
@@ -32,9 +32,9 @@ func (h *Handler) LogIn(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Printf("error unmarshaling %v\n", err)
 		}
-		cookie, err := h.UseCases.SetCookie(user)
+		cookie, err := h.UseCases.SetCookie(r.Context(), user)
 		if err != nil {
-			log.Printf("Error occured in LogIn handler: %v\n", err)
+			log.Printf("Error occured in LogIn rest: %v\n", err)
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}

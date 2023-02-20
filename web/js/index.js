@@ -53,7 +53,7 @@ const router = async() => {
     const view = new match.route.view(getParams(match));
 
     document.querySelector("#app").innerHTML = await view.getHtml();
-    view.Init();
+    await view.Init();
     console.log("view:", view);
 };
 

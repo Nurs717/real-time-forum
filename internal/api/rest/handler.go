@@ -1,4 +1,4 @@
-package handler
+package rest
 
 import "rtforum/internal/usecase"
 

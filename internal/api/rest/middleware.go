@@ -1,4 +1,4 @@
-package handler
+package rest
 
 import (
 	"context"
@@ -27,7 +27,7 @@ func (h *Handler) CheckCookie(next http.HandlerFunc) http.HandlerFunc {
 		if err != nil {
 			CtxKey = "Guest"
 		} else {
-			userID, err := h.UseCases.IsCookieValid(cookie.Value)
+			userID, err := h.UseCases.IsCookieValid(r.Context(), cookie.Value)
 			if err != nil {
 				CtxKey = "Guest"
 			} else {

@@ -2,7 +2,7 @@ package entity
 
 import (
 	"net/mail"
-	"rtforum/errors"
+	"rtforum/internal/cerror"
 	"unicode"
 )
 
@@ -21,14 +21,14 @@ type User struct {
 
 func (u *User) Validate() error {
 	if u.UserName == "" || u.Email == "" || u.Password == "" || u.FirstName == "" || u.LastName == "" {
-		return errors.ErrEmptyRegisterData
+		return cerror.NewErrorf(cerror.ErrorCodeInvalidArgument, cerror.DefaultType, cerror.ErrEmptyRegisterData)
 	}
 	_, err := mail.ParseAddress(u.Email)
 	if err != nil {
-		return errors.ErrEmailInvalid
+		return cerror.NewErrorf(cerror.ErrorCodeInvalidArgument, cerror.FormatMailType, cerror.ErrEmailInvalid)
 	}
-	if isPasswordValid(u.Password) {
-		return errors.ErrInvalidPassword
+	if !isPasswordValid(u.Password) {
+		return cerror.NewErrorf(cerror.ErrorCodeInvalidArgument, cerror.FormatPwdType, cerror.ErrInvalidPassword)
 	}
 	return nil
 }
@@ -40,7 +40,7 @@ func isPasswordValid(password string) bool {
 		hasLower  = false
 		hasNumber = false
 	)
-	if len(password) >= 7 {
+	if len(password) >= 8 {
 		hasMinLen = true
 	}
 	for _, char := range password {

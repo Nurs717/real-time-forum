@@ -1,16 +1,17 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 	"rtforum/internal/entity"
 	"time"
 )
 
 type Users interface {
-	NewUser(user *entity.User) error
-	GetUser(mail string) (string, string, error)
-	AddCookie(id string, cookieValue string, dt time.Time) error
-	GetUserIDbyCookie(token string) (string, error)
+	NewUser(ctx context.Context, user *entity.User) error
+	GetUser(ctx context.Context, mail string) (string, string, error)
+	AddCookie(ctx context.Context, id string, cookieValue string, dt time.Time) error
+	GetUserIDbyCookie(ctx context.Context, token string) (string, error)
 }
 
 type Post interface {
@@ -28,9 +29,9 @@ type Repository struct {
 	Comment
 }
 
-func NewRepository(db *sql.DB) *Repository {
+func NewRepository(db *sql.DB, timeout time.Duration) *Repository {
 	return &Repository{
-		Users: NewUsersRepo(db),
+		Users: NewUsersRepo(db, timeout),
 		Post:  NewPostRepo(db),
 	}
 }

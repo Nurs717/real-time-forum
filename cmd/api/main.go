@@ -6,11 +6,12 @@ import (
 	"os"
 	"os/signal"
 	"rtforum/config"
-	"rtforum/internal/api/handler"
+	"rtforum/internal/api/rest"
 	"rtforum/internal/api/server"
 	"rtforum/internal/repository"
 	"rtforum/internal/usecase"
 	"syscall"
+	"time"
 )
 
 func main() {
@@ -20,12 +21,12 @@ func main() {
 		log.Fatalf("failed to initialize db: %s", err.Error())
 	}
 	defer db.Close()
-	repo := repository.NewRepository(db)
+	repo := repository.NewRepository(db, time.Second*3)
 	deps := &usecase.UseCaseDeps{
 		Repo: repo,
 	}
 	useCases := usecase.NewUseCases(deps)
-	handlers := handler.NewHandler(useCases)
+	handlers := rest.NewHandler(useCases)
 	go func() {
 		if err := srv.Run(config.API_PORT, handlers.Router()); err != nil {
 			log.Fatalf("error occured while running http server: %s", err.Error())
