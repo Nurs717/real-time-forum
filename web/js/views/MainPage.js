@@ -1,4 +1,5 @@
 import AbstractView from "./AbstractView.js";
+import {drawNavMenuLoggedIn, drawWelcomeUserName, drawNavMenuLoggedOut} from "./Shared.js";
 
 async function getPosts(url) {
     // const url = new URL(window.location.href);
@@ -14,7 +15,7 @@ async function getPosts(url) {
                 drawWelcomeUserName();
             } else {
                 // draw nav menu logged out
-                drawNavmenuLoggedOut();
+                drawNavMenuLoggedOut();
             }
             //draw categories
             drawCategories();
@@ -38,7 +39,7 @@ async function getPosts(url) {
                     tr.setAttribute('class', 'odd');
                 }
                 let td_topic = document.createElement("td");
-                td_topic.style = "padding-left: 25px; padding-right: 15px; text-align: justify;"
+                td_topic.style.cssText = "padding-left: 25px; padding-right: 15px; text-align: justify;"
                 let a_topic = document.createElement("a");
                 a_topic.setAttribute("href", `http://localhost:8081/post/${post.ID}`);
                 a_topic.setAttribute("data-link", "")
@@ -50,7 +51,7 @@ async function getPosts(url) {
                 td_categories.appendChild(div_categories);
                 let td_comments = document.createElement("td");
                 let div_comments = document.createElement("div");
-                div_comments.innerText = 2;
+                div_comments.innerText = '2';
                 td_comments.appendChild(div_comments);
                 let td_created = document.createElement("td");
                 let div_created = document.createElement("div");
@@ -65,46 +66,6 @@ async function getPosts(url) {
         }
     )
 }
-
-async function drawNavMenuLoggedIn() {
-    let menu = document.getElementsByClassName("menu");
-    let newPost = document.createElement('a');
-    newPost.setAttribute('href', '/create-post');
-    newPost.setAttribute('data-link', '');
-    newPost.innerHTML = 'New Post';
-    let logout = document.createElement('button');
-    logout.setAttribute('logout-button', '');
-    logout.innerHTML = 'Log Out';
-    menu[0].appendChild(newPost);
-    menu[0].appendChild(logout);
-}
-
-async function drawNavmenuLoggedOut() {
-    let menu = document.getElementsByClassName("menu");
-    let register = document.createElement('a');
-    register.setAttribute('href', '/signup');
-    register.setAttribute('data-link', '');
-    register.innerHTML = 'Register';
-    let login = document.createElement('a');
-    login.setAttribute('href', '/login');
-    login.setAttribute('data-link', '');
-    login.innerHTML = 'Log In';
-    menu[0].appendChild(register);
-    menu[0].appendChild(login);
-}
-
-async function drawWelcomeUserName() {
-    let row = document.getElementsByClassName("row");
-    let username = document.createElement('div');
-    username.setAttribute('class', 'column lpad top-msg ar');
-    username.innerHTML = 'Welcome, ';
-    let welcome = document.createElement('a');
-    welcome.setAttribute('id', 'welcome_username')
-    welcome.setAttribute('class', 'underline');
-    username.appendChild(welcome);
-    row[1].appendChild(username);
-}
-
 
 async function drawCategories() {
     let row = document.getElementsByClassName('row')
@@ -139,16 +100,16 @@ async function drawPosts() {
     let table_head = document.createElement("thead");
     let tr_head = document.createElement("tr");
     let th_topic = document.createElement("th");
-    th_topic.style = "width:60%";
+    th_topic.style.cssText = "width:60%";
     th_topic.innerHTML = "Topic";
     let th_comments = document.createElement("th");
-    th_comments.style = "width:10%";
+    th_comments.style.cssText = "width:10%";
     th_comments.innerHTML = "Comments";
     let th_created = document.createElement("th");
-    th_created.style = "width:15%";
+    th_created.style.cssText = "width:15%";
     th_created.innerHTML = "Created";
     let th_categories = document.createElement("th");
-    th_categories.style = "width:15%"
+    th_categories.style.cssText = "width:15%"
     th_categories.innerHTML = "Categories";
     tr_head.appendChild(th_topic);
     tr_head.appendChild(th_categories);
@@ -192,7 +153,7 @@ export default class extends AbstractView {
 
     async Init() {
         let url = new URL("http://localhost:8080/");
-        getPosts(url);
+        await getPosts(url);
 
         const button = document.getElementById("app");
         button.addEventListener("click", async(e) => {

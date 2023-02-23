@@ -10,6 +10,8 @@ import (
 type User struct {
 	ID        string
 	UserName  string `json:"username"`
+	Age       string `json:"age"`
+	Gender    string `json:"gender"`
 	FirstName string `json:"firstname"`
 	LastName  string `json:"lastname"`
 	Email     string `json:"email"`
@@ -20,7 +22,8 @@ type User struct {
 }
 
 func (u *User) Validate() error {
-	if u.UserName == "" || u.Email == "" || u.Password == "" || u.FirstName == "" || u.LastName == "" {
+	if u.UserName == "" || u.Email == "" || u.Password == "" || u.FirstName == "" || u.LastName == "" ||
+		u.Age == "" || u.Gender == "" {
 		return cerror.NewErrorf(cerror.ErrorCodeInvalidArgument, cerror.DefaultType, cerror.ErrEmptyRegisterData)
 	}
 	_, err := mail.ParseAddress(u.Email)

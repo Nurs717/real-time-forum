@@ -26,10 +26,6 @@ var ErrTokenInvalid = errors.New("token not found in db")
 // ErrEmailInvalid when email string invalid format
 const ErrEmailInvalid = "invalid email format"
 
-func s() {
-	//error_handler.Unwrap()
-}
-
 type Error struct {
 	origin  error
 	msg     string
@@ -40,7 +36,7 @@ type Error struct {
 type ErrorCode uint
 
 const (
-	ErrorCodeUnknown = iota
+	ErrorCodeUnknown ErrorCode = iota
 	ErrorCodeNotFound
 	ErrorCodeInvalidArgument
 	ErrorCodeConflict

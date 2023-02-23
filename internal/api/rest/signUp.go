@@ -10,6 +10,7 @@ import (
 )
 
 func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	switch r.Method {
 	case "POST":
 		var user *entity.User
@@ -18,7 +19,6 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 			log.Printf("error reading body %v\n", err)
 			renderErrorResponse(w, "", err)
 		}
-		defer r.Body.Close()
 
 		err = json.Unmarshal(data, &user)
 		if err != nil {
@@ -33,5 +33,6 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		fmt.Printf("user created")
+		renderResponse(w, nil, http.StatusCreated)
 	}
 }

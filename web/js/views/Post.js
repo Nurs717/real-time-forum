@@ -1,4 +1,5 @@
 import AbstractView from "./AbstractView.js";
+import {drawNavMenuLoggedIn, drawNavMenuLoggedOut, drawWelcomeUserName} from "./Shared.js";
 
 export default class extends AbstractView {
     constructor() {
@@ -31,7 +32,7 @@ export default class extends AbstractView {
         let id = window.location.pathname.replace("/post/", "");
         let url = new URL(`http://localhost:8080/post/${id}`);
         console.log("post worked", url.href)
-        getPostPage(url.href);
+        await getPostPage(url.href);
     }
 }
 
@@ -49,14 +50,14 @@ async function getPostPage(url) {
                 // draw nav menu
                 drawNavMenuLoggedIn();
                 //draw username
-                drawWelcomUserName();
+                drawWelcomeUserName();
                 //draw post container
                 drawPostContainer();
                 //draw create comment container
                 drawCreateCommentContainer();
             } else {
                 // draw nav menu logged out
-                drawNavmenuLoggedOut();
+                drawNavMenuLoggedOut();
                 //draw post container
                 drawPostContainer();
             }
@@ -67,45 +68,6 @@ async function getPostPage(url) {
     )
 }
 
-async function drawNavMenuLoggedIn() {
-    let menu = document.getElementsByClassName("menu");
-    let newPost = document.createElement('a');
-    newPost.setAttribute('href', '/create-post');
-    newPost.setAttribute('data-link', '');
-    newPost.innerHTML = 'New Post';
-    let logout = document.createElement('button');
-    logout.setAttribute('logout-button', '');
-    logout.innerHTML = 'Log Out';
-    menu[0].appendChild(newPost);
-    menu[0].appendChild(logout);
-}
-
-async function drawNavmenuLoggedOut() {
-    let menu = document.getElementsByClassName("menu");
-    let register = document.createElement('a');
-    register.setAttribute('href', '/signup');
-    register.setAttribute('data-link', '');
-    register.innerHTML = 'Register';
-    let login = document.createElement('a');
-    login.setAttribute('href', '/login');
-    login.setAttribute('data-link', '');
-    login.innerHTML = 'Log In';
-    menu[0].appendChild(register);
-    menu[0].appendChild(login);
-}
-
-async function drawWelcomUserName() {
-    let row = document.getElementsByClassName("row");
-    let username = document.createElement('div');
-    username.setAttribute('class', 'column lpad top-msg ar');
-    username.innerHTML = 'Welcome, ';
-    let welcome = document.createElement('a');
-    welcome.setAttribute('id', 'welcome_username')
-    welcome.setAttribute('class', 'underline');
-    username.appendChild(welcome);
-    row[1].appendChild(username);
-}
-
 async function drawPostContainer() {
     let container = document.getElementById('container');
     let post_container = document.createElement('div');
@@ -114,7 +76,7 @@ async function drawPostContainer() {
     like_box.setAttribute('class', 'like-box');
     let like = document.createElement('div');
     like.setAttribute('id', 'like');
-    like.innerHTML = -2;
+    like.innerHTML = '-2';
     let like_plus = document.createElement('button');
     like_plus.setAttribute('class', 'like-plus');
     let like_minus = document.createElement('button');
@@ -184,7 +146,7 @@ async function drawCommentsContainer() {
     like_box_comment.setAttribute('class', 'like-box-comment')
     let like_comment = document.createElement('div');
     like_comment.setAttribute('id', 'like-comment');
-    like_comment.innerHTML = 14;
+    like_comment.innerHTML = '14';
     let like_plus_comment = document.createElement('button');
     like_plus_comment.setAttribute('class', 'like-plus-comment');
     let like_minus_comment = document.createElement('button');
