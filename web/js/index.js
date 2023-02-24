@@ -44,11 +44,18 @@ const router = async() => {
     console.log("match:", match);
 
     if (!match) {
+        console.log("match2:", match);
         match = {
             route: routes[0],
             result: [location.pathname]
+
         };
+        console.log("match3:", match);
+
+        document.querySelector("#app").innerHTML = `<div>Not found</div>`;
+        return
     }
+
 
     const view = new match.route.view(getParams(match));
 

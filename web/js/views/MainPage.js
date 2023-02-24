@@ -2,7 +2,6 @@ import AbstractView from "./AbstractView.js";
 import {drawNavMenuLoggedIn, drawWelcomeUserName, drawNavMenuLoggedOut} from "./Shared.js";
 
 async function getPosts(url) {
-    // const url = new URL(window.location.href);
     fetch(url.href, {
         method: "GET",
         credentials: 'include'

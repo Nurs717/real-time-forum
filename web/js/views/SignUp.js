@@ -1,6 +1,6 @@
 import AbstractView from "./AbstractView.js";
 
-let regHTML = `
+const regHTML = `
 <div class="sign-up-container">
     <form id="sign-up-form" action="/">
         <h1>Registration</h1>
@@ -116,15 +116,18 @@ export default class extends AbstractView {
         const password = document.getElementById('password');
         const password2 = document.getElementById('password2');
 
+        let unique = false;
+
         form.addEventListener('submit', e => {
             e.preventDefault();
 
             if (validateInputs()) {
                 const formdata = new FormData(form)
-                console.log('age: ',formdata.get("age"));
                 fetch(url, {
-
                     method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                     body: JSON.stringify({
                         username: formdata.get("username"),
                         age: formdata.get("age"),
@@ -133,9 +136,33 @@ export default class extends AbstractView {
                         lastname: formdata.get("lastname"),
                         email: formdata.get("email"),
                         password: formdata.get("password") }),
-                }).catch(
-                    error => console.error(error)
-                )
+                })
+                    .then(
+                        (response) => {
+                            if (response.status === 201) {
+                            console.log("201", response.status);
+                            const sign_up = document.getElementById('sign-up');
+                            sign_up.innerHTML = successHTML;
+                            } else if (response.status === 409) {
+                            unique = true;
+                            }
+                            return response.json();
+                        }
+                    )
+                    .then(
+                        (data) => {
+                            if (unique === true) {
+                                if (data.error_type === 'user') {
+                                    setError(username, data.error_message);
+                                } else if (data.error_type === 'mail') {
+                                    setError(email, data.error_message);
+                                }
+                            }
+                        }
+                    )
+                    .catch(
+                        (error) => console.error(error)
+                );
             }
         });
 
@@ -158,13 +185,12 @@ export default class extends AbstractView {
         };
 
         const isValidEmail = email => {
-            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(String(email).toLowerCase());
+            const regex_mail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return regex_mail.test(String(email).toLowerCase());
         }
 
         const isValidPassword = password => {
-            const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]/.test(password);
-            return re;
+            return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]/.test(password);
         }
 
         const validateInputs = () => {
@@ -250,3 +276,16 @@ export default class extends AbstractView {
         };
     }
 }
+
+const successHTML= `
+<div class="success-body">
+    <div class="success-container">
+        <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+            <i class="success-checkmark">✓</i>
+        </div>
+        <h1>Success</h1>
+        <p>Congratulations, your account<br/>has been successfully created.</p>
+        <a href="http://localhost:8081/login" class="contBtn">Login</a>
+    </div>
+</div>
+`
