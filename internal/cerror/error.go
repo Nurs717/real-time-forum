@@ -6,25 +6,22 @@ import (
 )
 
 // ErrEmptyRegisterData invalid entity
-const ErrEmptyRegisterData = "missing required field"
+const ErrEmptyRegisterData = "usecase: entity: Validate: missing required field"
 
 // ErrEmptyPost empty post
 var ErrEmptyPost = errors.New("the post is empty")
 
 // ErrMailNotExist when log in there is no user with that email
-var ErrMailNotExist = errors.New("there is no user with this mail")
-
-// ErrWrongPassword password of User is wrong while log in
-var ErrWrongPassword = errors.New("password of User is wrong while log in")
+const ErrMailNotExist = "repo: getUser: there is no user with this mail"
 
 // ErrInvalidPassword missing required letter when registering
-const ErrInvalidPassword = "invalid password, missing Upper, Lower or Number letter, or length less than 8"
+const ErrInvalidPassword = "usecase: entity: Validate: invalid password, missing Upper, Lower or Number letter, or length less than 8"
 
 // ErrTokenInvalid token is not found when trying to get authorization
 var ErrTokenInvalid = errors.New("token not found in db")
 
 // ErrEmailInvalid when email string invalid format
-const ErrEmailInvalid = "invalid email format"
+const ErrEmailInvalid = "usecase: entity: Validate: invalid email format"
 
 type Error struct {
 	origin  error
@@ -36,10 +33,12 @@ type Error struct {
 type ErrorCode uint
 
 const (
-	ErrorCodeUnknown ErrorCode = iota
+	ErrorCodeInternal ErrorCode = iota
+	ErrorCodeUnknown
 	ErrorCodeNotFound
 	ErrorCodeInvalidArgument
 	ErrorCodeConflict
+	ErrorCodeUnauthorized
 )
 
 const (
@@ -63,7 +62,14 @@ func NewErrorf(code ErrorCode, errType string, format string, a ...interface{}) 
 	return WrapErrorf(nil, code, errType, format, a...)
 }
 
+func (e *Error) Msg() string {
+	return e.msg
+}
+
 func (e *Error) Error() string {
+	if e.origin != nil {
+		return fmt.Sprintf("%s: %s", e.msg, e.origin.Error())
+	}
 	return e.msg
 }
 

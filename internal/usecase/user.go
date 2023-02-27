@@ -26,7 +26,6 @@ func NewUserUseCase(repo repository.Users) *UserUseCase {
 func (u *UserUseCase) NewUser(ctx context.Context, user *entity.User) error {
 	//validating incoming data
 	if err := user.Validate(); err != nil {
-		log.Printf("usecase: creat user: %v\n", err)
 		return err
 	}
 	// setting uuid number for user
@@ -34,13 +33,11 @@ func (u *UserUseCase) NewUser(ctx context.Context, user *entity.User) error {
 	// setting generated encrypted password to user
 	pwd, err := generatePassword(user.Password)
 	if err != nil {
-		log.Printf("uscase creat user: generate pwd: %v", err)
 		return err
 	}
 	user.Password = pwd
 	// creates user in repo
 	if err = u.repo.NewUser(ctx, user); err != nil {
-		log.Printf("usecase creat user: %v\n", err)
 		return err
 	}
 	return nil
@@ -49,13 +46,12 @@ func (u *UserUseCase) NewUser(ctx context.Context, user *entity.User) error {
 func (u *UserUseCase) SetCookie(ctx context.Context, user *entity.User) (*http.Cookie, error) {
 	id, password, err := u.repo.GetUser(ctx, user.Email)
 	if err != nil {
-		log.Printf("error occured usecase SetCookie: %v\n", err)
 		return nil, err
 	}
 	hashedPassword := []byte(password)
 	passwordToCheck := []byte(user.Password)
 	if err := bcrypt.CompareHashAndPassword(hashedPassword, passwordToCheck); err != nil {
-		return nil, cerror.ErrWrongPassword
+		return nil, cerror.WrapErrorf(err, cerror.ErrorCodeUnauthorized, cerror.DefaultType, "usecase: SetCookie: check password")
 	}
 
 	expire := time.Now().Add(1 * time.Hour)
@@ -67,7 +63,6 @@ func (u *UserUseCase) SetCookie(ctx context.Context, user *entity.User) (*http.C
 		SameSite: http.SameSiteLaxMode,
 	}
 	if err = u.repo.AddCookie(ctx, id, cookie.Value, expire); err != nil {
-		log.Printf("error occured in usecase when adding session: %v\n", err)
 		return nil, err
 	}
 	return cookie, nil
@@ -85,7 +80,7 @@ func (u *UserUseCase) IsCookieValid(ctx context.Context, token string) (string, 
 func generatePassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 	if err != nil {
-		return "", err
+		return "", cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "usecase: NewUser: generatePassword")
 	}
 	return string(hash), nil
 }

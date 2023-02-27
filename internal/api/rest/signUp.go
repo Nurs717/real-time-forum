@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
+	"rtforum/internal/cerror"
 	"rtforum/internal/entity"
 )
 
@@ -16,23 +16,23 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 		var user *entity.User
 		data, err := io.ReadAll(r.Body)
 		if err != nil {
-			log.Printf("error reading body %v\n", err)
-			renderErrorResponse(w, "", err)
+			err = cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "rest: SignUp: read body req")
+			renderErrorResponse(w, "internal error", err)
+			return
 		}
 
 		err = json.Unmarshal(data, &user)
 		if err != nil {
-			log.Printf("error unmarshaling sign up body %v\n", err)
-			renderErrorResponse(w, "", err)
+			err = cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "rest: SignUp: unmarshal body")
+			renderErrorResponse(w, "internal error", err)
 			return
 		}
-		fmt.Printf("user: %+v\n", user)
+
 		if err = h.UseCases.Users.NewUser(r.Context(), user); err != nil {
-			log.Printf("rest: create user: %v\n", err)
 			renderErrorResponse(w, "creat user", err)
 			return
 		}
-		fmt.Printf("user created")
+		fmt.Printf("user: %s created", user.UserName)
 		renderResponse(w, nil, http.StatusCreated)
 	}
 }

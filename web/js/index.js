@@ -3,6 +3,7 @@ import AddPost from "./views/AddPost.js";
 import SignUp from "./views/SignUp.js";
 import LogIn from "./views/LogIn.js";
 import Post from "./views/Post.js";
+import {getError404} from "./views/Shared.js";
 
 console.log("JS Loaded");
 
@@ -50,9 +51,8 @@ const router = async() => {
             result: [location.pathname]
 
         };
-        console.log("match3:", match);
 
-        document.querySelector("#app").innerHTML = `<div>Not found</div>`;
+        document.querySelector("#app").innerHTML = getError404;
         return
     }
 

@@ -36,3 +36,19 @@ export async function drawWelcomeUserName() {
     username.appendChild(welcome);
     row[1].appendChild(username);
 }
+
+export const getError500 = `
+    <div id="error-container">
+        <div class="fof">
+            <h1>Error 500</h1>
+        </div>
+    </div>
+`
+
+export const getError404 = `
+    <div id="error-container">
+        <div class="fof">
+            <h1>Error 404</h1>
+        </div>
+    </div>
+`

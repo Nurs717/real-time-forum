@@ -3,6 +3,7 @@ package rest
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"rtforum/internal/cerror"
@@ -24,14 +25,24 @@ func renderErrorResponse(w http.ResponseWriter, msg string, err error) {
 		switch ierr.Code() {
 		case cerror.ErrorCodeConflict:
 			status = http.StatusConflict
-			resp.Msg = ierr.Error()
+			resp.Msg = ierr.Msg()
 			resp.Type = ierr.Type()
+			logMsg := fmt.Sprintf("repo: NewUser: exec db: %s", ierr.Msg())
+			err = cerror.WrapErrorf(ierr.Unwrap(), cerror.ErrorCodeConflict, "", logMsg)
+			errors.As(err, &ierr)
 		case cerror.ErrorCodeInvalidArgument:
 			status = http.StatusBadRequest
-			resp.Msg = ierr.Error()
+			resp.Msg = "validation requirements missing"
 			resp.Type = ierr.Type()
+		case cerror.ErrorCodeUnauthorized:
+			status = http.StatusUnauthorized
+		case cerror.ErrorCodeInternal:
+			resp.Msg = "internal error"
 		}
 	}
+
+	fmt.Printf("%s\n", ierr.Error())
+
 	renderResponse(w, resp, status)
 }
 

@@ -1,4 +1,5 @@
 import AbstractView from "./AbstractView.js";
+import {getError500} from "./Shared.js";
 
 const regHTML = `
 <div class="sign-up-container">
@@ -140,11 +141,15 @@ export default class extends AbstractView {
                     .then(
                         (response) => {
                             if (response.status === 201) {
-                            console.log("201", response.status);
-                            const sign_up = document.getElementById('sign-up');
-                            sign_up.innerHTML = successHTML;
+                                console.log("201", response.status);
+                                const sign_up = document.getElementById('sign-up');
+                                sign_up.innerHTML = successHTML;
                             } else if (response.status === 409) {
-                            unique = true;
+                                unique = true;
+                            } else if (response.status === 500) {
+                                let app = document.getElementById("app");
+                                app.innerHTML = getError500;
+                                return
                             }
                             return response.json();
                         }

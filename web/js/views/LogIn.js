@@ -32,7 +32,7 @@ export default class extends AbstractView {
         </div>
         <div>
         <label for="password">Password</label>
-        <input id="password" name="" type="text">
+        <input id="password" name="password" type="text">
         </div>
         <div>
         <button type="submit" style="width:100px;">Login</button>
@@ -75,6 +75,9 @@ async function logIn() {
         fetch(url, {
                 mode: 'cors',
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 credentials: 'include',
                 body: JSON.stringify({ email: formdata.get("email"), password: formdata.get("password") })
             })
