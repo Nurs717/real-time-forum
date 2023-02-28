@@ -11,9 +11,6 @@ const ErrEmptyRegisterData = "usecase: entity: Validate: missing required field"
 // ErrEmptyPost empty post
 var ErrEmptyPost = errors.New("the post is empty")
 
-// ErrMailNotExist when log in there is no user with that email
-const ErrMailNotExist = "repo: getUser: there is no user with this mail"
-
 // ErrInvalidPassword missing required letter when registering
 const ErrInvalidPassword = "usecase: entity: Validate: invalid password, missing Upper, Lower or Number letter, or length less than 8"
 

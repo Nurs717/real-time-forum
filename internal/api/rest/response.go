@@ -41,7 +41,7 @@ func renderErrorResponse(w http.ResponseWriter, msg string, err error) {
 		}
 	}
 
-	fmt.Printf("%s\n", ierr.Error())
+	log.Printf("%s\n", ierr.Error())
 
 	renderResponse(w, resp, status)
 }
@@ -51,7 +51,7 @@ func renderResponse(w http.ResponseWriter, res interface{}, status int) {
 
 	content, err := json.Marshal(res)
 	if err != nil {
-		log.Printf("error occured when marshalling response: %v\n", err)
+		log.Printf("rest: Marshal response: %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -59,6 +59,6 @@ func renderResponse(w http.ResponseWriter, res interface{}, status int) {
 	w.WriteHeader(status)
 
 	if _, err := w.Write(content); err != nil {
-		log.Printf("error occured when writing to response: %v\n", err)
+		log.Printf("rest: Write to response: %v\n", err)
 	}
 }

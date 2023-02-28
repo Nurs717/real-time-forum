@@ -12,11 +12,12 @@ type Users interface {
 	GetUser(ctx context.Context, mail string) (string, string, error)
 	AddCookie(ctx context.Context, id string, cookieValue string, dt time.Time) error
 	GetUserIDbyCookie(ctx context.Context, token string) (string, error)
+	GetUserName(ctx context.Context, userID string) (string, error)
 }
 
 type Post interface {
 	CreatePost(post *entity.Post) error
-	GetAllPosts() ([]entity.Post, error)
+	GetAllPosts(ctx context.Context) ([]entity.Post, error)
 	GetPostsByCategory(category string) ([]entity.Post, error)
 }
 
@@ -32,6 +33,6 @@ type Repository struct {
 func NewRepository(db *sql.DB, timeout time.Duration) *Repository {
 	return &Repository{
 		Users: NewUsersRepo(db, timeout),
-		Post:  NewPostRepo(db),
+		Post:  NewPostRepo(db, timeout),
 	}
 }

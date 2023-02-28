@@ -1,58 +1,6 @@
 import AbstractView from "./AbstractView.js";
 import {getError500} from "./Shared.js";
 
-const regHTML = `
-<div class="sign-up-container">
-    <form id="sign-up-form" action="/">
-        <h1>Registration</h1>
-        <div class="input-control">
-            <label for="username">Username</label>
-            <input id="username" name="username" type="text">
-            <div class="error"></div>
-        </div>
-        <div class="input-control">
-            <label for="age">Age</label>
-            <input id="age" name="age" type="number" min="18" max="100" autocomplete="off">
-            <div class="error"></div>
-        </div>
-        <div class="input-control">
-            <label for="gender">Gender</label>
-            <select name="gender" id="gender">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
-            <div class="error"></div>
-        </div>
-        <div class="input-control">
-            <label for="firstname">First Name</label>
-            <input id="firstname" name="firstname" type="text">
-            <div class="error"></div>
-        </div>
-        <div class="input-control">
-            <label for="lastname">Last Name</label>
-            <input id="lastname" name="lastname" type="text">
-            <div class="error"></div>
-        </div>
-        <div class="input-control">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="text">
-            <div class="error"></div>
-        </div>
-        <div class="input-control">
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password">
-            <div class="error"></div>
-        </div>
-        <div class="input-control">
-            <label for="password2">Password again</label>
-            <input id="password2" name="password2" type="password">
-            <div class="error"></div>
-        </div>
-        <button type="submit">Sign Up</button>
-    </form>
-</div>
-`
-
 export default class extends AbstractView {
     constructor() {
         super();
@@ -190,8 +138,8 @@ export default class extends AbstractView {
         };
 
         const isValidEmail = email => {
-            const regex_mail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return regex_mail.test(String(email).toLowerCase());
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
         }
 
         const isValidPassword = password => {
@@ -281,6 +229,58 @@ export default class extends AbstractView {
         };
     }
 }
+
+const regHTML = `
+<div class="sign-up-container">
+    <form id="sign-up-form" action="/">
+        <h1>Registration</h1>
+        <div class="input-control">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text">
+            <div class="error"></div>
+        </div>
+        <div class="input-control">
+            <label for="age">Age</label>
+            <input id="age" name="age" type="number" min="18" max="100" autocomplete="off">
+            <div class="error"></div>
+        </div>
+        <div class="input-control">
+            <label for="gender">Gender</label>
+            <select name="gender" id="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <div class="error"></div>
+        </div>
+        <div class="input-control">
+            <label for="firstname">First Name</label>
+            <input id="firstname" name="firstname" type="text">
+            <div class="error"></div>
+        </div>
+        <div class="input-control">
+            <label for="lastname">Last Name</label>
+            <input id="lastname" name="lastname" type="text">
+            <div class="error"></div>
+        </div>
+        <div class="input-control">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="text">
+            <div class="error"></div>
+        </div>
+        <div class="input-control">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password">
+            <div class="error"></div>
+        </div>
+        <div class="input-control">
+            <label for="password2">Password again</label>
+            <input id="password2" name="password2" type="password">
+            <div class="error"></div>
+        </div>
+        <button type="submit">Sign Up</button>
+    </form>
+</div>
+`
 
 const successHTML= `
 <div class="success-body">

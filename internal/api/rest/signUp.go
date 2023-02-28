@@ -2,8 +2,8 @@ package rest
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"rtforum/internal/cerror"
 	"rtforum/internal/entity"
@@ -32,7 +32,7 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 			renderErrorResponse(w, "creat user", err)
 			return
 		}
-		fmt.Printf("user: %s created", user.UserName)
+		log.Printf("user: %s created\n", user.UserName)
 		renderResponse(w, nil, http.StatusCreated)
 	}
 }

@@ -11,12 +11,13 @@ type Users interface {
 	NewUser(ctx context.Context, user *entity.User) error
 	SetCookie(ctx context.Context, user *entity.User) (*http.Cookie, error)
 	IsCookieValid(ctx context.Context, token string) (string, error)
+	GetUserName(ctx context.Context, userID string) (string, error)
 }
 
 type Post interface {
 	Validate(post *entity.Post) error
 	Create(post *entity.Post) error
-	GetAllPosts() ([]entity.Post, error)
+	GetAllPosts(ctx context.Context) ([]entity.Post, error)
 	GetPostsByCategory(category string) ([]entity.Post, error)
 }
 

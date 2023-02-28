@@ -1,4 +1,4 @@
-import MainPage from "./views/MainPage.js";
+import MainPage from "./views/Posts.js";
 import AddPost from "./views/AddPost.js";
 import SignUp from "./views/SignUp.js";
 import LogIn from "./views/LogIn.js";

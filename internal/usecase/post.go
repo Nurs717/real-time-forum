@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"rtforum/internal/cerror"
@@ -44,10 +45,9 @@ func (u *PostUseCase) Create(post *entity.Post) error {
 	return nil
 }
 
-func (u *PostUseCase) GetAllPosts() ([]entity.Post, error) {
-	posts, err := u.repo.GetAllPosts()
+func (u *PostUseCase) GetAllPosts(ctx context.Context) ([]entity.Post, error) {
+	posts, err := u.repo.GetAllPosts(ctx)
 	if err != nil {
-		log.Printf("Error occured usecase getposts: %v", err)
 		return nil, err
 	}
 	return posts, nil

@@ -1,18 +1,23 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 	"log"
+	"rtforum/internal/cerror"
 	"rtforum/internal/entity"
+	"time"
 )
 
 type PostRepo struct {
-	db *sql.DB
+	db      *sql.DB
+	timeout time.Duration
 }
 
-func NewPostRepo(db *sql.DB) *PostRepo {
+func NewPostRepo(db *sql.DB, timeout time.Duration) *PostRepo {
 	return &PostRepo{
-		db: db,
+		db:      db,
+		timeout: timeout,
 	}
 }
 
@@ -22,12 +27,13 @@ func (r *PostRepo) CreatePost(post *entity.Post) error {
 		log.Printf("error occured adding post to db: %v", err)
 		return err
 	}
-	var id int64
-	id, err = postSQL.LastInsertId()
+
+	id, err := postSQL.LastInsertId()
 	if err != nil {
 		log.Printf("error ocured when getting id from sql result table post: %v", err)
 		return err
 	}
+
 	for _, category := range post.Category {
 		if category != "" {
 			_, err = r.db.Exec("INSERT OR IGNORE INTO Category (NAME) VALUES (?)", category)
@@ -45,19 +51,21 @@ func (r *PostRepo) CreatePost(post *entity.Post) error {
 	return nil
 }
 
-func (r *PostRepo) GetAllPosts() ([]entity.Post, error) {
-	posts := []entity.Post{}
-	post, err := r.db.Query("SELECT P.ID, U.UserName, P.Title, P.Date FROM Post as P INNER JOIN Users as U ON U.ID = P.User_ID")
+func (r *PostRepo) GetAllPosts(ctx context.Context) ([]entity.Post, error) {
+	ctxWithTimeout, cancel := context.WithTimeout(ctx, r.timeout)
+	defer cancel()
+
+	var posts []entity.Post
+	post, err := r.db.QueryContext(ctxWithTimeout,
+		"SELECT P.ID, U.UserName, P.Body, P.Title, P.Date FROM Post as P INNER JOIN Users as U ON U.ID = P.User_ID")
 	if err != nil {
-		log.Printf("error occured querying db: %v", err)
-		return nil, err
+		return nil, cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "repo: GetAllPosts: Query:")
 	}
 	for post.Next() {
-		p := entity.Post{}
-		err := post.Scan(&p.ID, &p.UserName, &p.Title, &p.PostDate)
+		var p entity.Post
+		err := post.Scan(&p.ID, &p.UserName, &p.Body, &p.Title, &p.PostDate)
 		if err != nil {
-			log.Printf("Error occured scanning Query %v\n", err)
-			return nil, err
+			return nil, cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "repo: GetAllPosts: Scan rows:")
 		}
 		posts = append(posts, p)
 	}
@@ -65,7 +73,7 @@ func (r *PostRepo) GetAllPosts() ([]entity.Post, error) {
 }
 
 func (r *PostRepo) GetPostsByCategory(category string) ([]entity.Post, error) {
-	posts := []entity.Post{}
+	var posts []entity.Post
 	post, err := r.db.Query("SELECT P.ID, U.UserName, P.Title, P.Date FROM Post as P INNER JOIN Users as U ON U.ID = P.User_ID INNER JOIN Category_Map as Map ON Map.Category_ID = Category.NAME INNER JOIN Category ON Map.Post_ID = P.ID WHERE Category.NAME = ?", category)
 	if err != nil {
 		log.Printf("error occured querying db: %v", err)

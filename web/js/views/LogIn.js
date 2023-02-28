@@ -1,4 +1,5 @@
 import AbstractView from "./AbstractView.js";
+import {getError500} from "./Shared.js";
 
 export default class extends AbstractView {
     constructor() {
@@ -8,46 +9,54 @@ export default class extends AbstractView {
 
     async getHtml() {
         return `
-        <header id="#top">
+        <header id="top">
             <div class="row">
                 <div class="column lpad">
                     <div class="logo">
-                        <span>MyForum</span>
+                        <a href="http://localhost:8081/" data-link>MyForum</a>
                     </div>
                 </div>
                 <div class="column ar lpad">
                     <nav class="menu">
                         <a href="/" id="h_posts" class="current nav_link" data-link>Posts</a>
-                        <a href="/create-post" data-link>New Post</a>
                     </nav>
                 </div>
             </div>
         </header>
-
-        <h1>Login</h1>
-        <form id="loginInputForm" onSubmit="return false;">
-        <div>
-        <label for="email">Email</label>
-        <input id="email" name="email" type="text">
+        <div class="row">
         </div>
-        <div>
-        <label for="password">Password</label>
-        <input id="password" name="password" type="text">
+        
+        <div class="login-container">
+            <form id="login-form" action="/">
+                <h1>Login</h1>   
+                <div class="input-control">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="text">
+                <div class="error"></div>
+                </div>
+                <div class="input-control">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password">
+                <div class="error"></div>
+                </div>
+                <button type="submit">Login</button>
+             </form>
         </div>
-        <div>
-        <button type="submit" style="width:100px;">Login</button>
-        </div>
-        <div id="invalid_user"></div>
-        <p>
-            <a href="/signup" data-link>Sign Up</a>.
-        </p>
-        </form>
         `;
     }
 
+    async drawNavMenuLoggedOut() {
+        let menu = document.getElementsByClassName("menu");
+        let register = document.createElement('a');
+        register.setAttribute('href', '/signup');
+        register.setAttribute('data-link', '');
+        register.innerHTML = 'Register';
+        menu[0].appendChild(register);
+    }
 
     async Init() {
-        logIn();
+        await this.drawNavMenuLoggedOut()
+        await logIn();
     }
 }
 
@@ -56,15 +65,15 @@ async function logIn() {
 
     fetch(url, {
         mode: 'cors',
-        method: 'POST',
+        method: 'GET',
         credentials: 'include',
     }).then(async(resp) => {
-        if (resp.status == 202) {
+        if (resp.status === 202) {
             document.getElementById("h_posts").click();
         }
     });
 
-    var inputForm = document.getElementById("loginInputForm");
+    const inputForm = document.getElementById("login-form");
 
     inputForm.addEventListener('submit', (event) => {
         //prevent auto submission
@@ -84,9 +93,19 @@ async function logIn() {
             .then(async(resp) => {
                 if (resp.ok) {
                     document.getElementById("h_posts").click();
-                } else if (resp.status == 401) {
-                    console.log("401 worked:")
-                    document.getElementById("invalid_user").innerHTML = "invalid user or password"
+                } else if (resp.status === 401) {
+                    const mail = document.getElementById('email');
+                    const mailInputControl = mail.parentElement;
+                    const password = document.getElementById('password');
+                    const pwdInputControl = password.parentElement;
+                    const errorDisplay = pwdInputControl.querySelector('.error');
+
+                    errorDisplay.innerText = "invalid user or password";
+                    mailInputControl.classList.add('error');
+                    pwdInputControl.classList.add('error');
+                } else if (resp.status === 500) {
+                    let app = document.getElementById("app");
+                    app.innerHTML = getError500;
                 }
             })
             .catch((err) => {

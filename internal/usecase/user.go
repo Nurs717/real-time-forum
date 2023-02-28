@@ -2,11 +2,11 @@ package usecase
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"rtforum/internal/cerror"
 	"rtforum/internal/entity"
 	"rtforum/internal/repository"
+	"strings"
 	"time"
 
 	uuid "github.com/satori/go.uuid"
@@ -36,6 +36,7 @@ func (u *UserUseCase) NewUser(ctx context.Context, user *entity.User) error {
 		return err
 	}
 	user.Password = pwd
+	user.Email = strings.ToLower(user.Email)
 	// creates user in repo
 	if err = u.repo.NewUser(ctx, user); err != nil {
 		return err
@@ -44,6 +45,7 @@ func (u *UserUseCase) NewUser(ctx context.Context, user *entity.User) error {
 }
 
 func (u *UserUseCase) SetCookie(ctx context.Context, user *entity.User) (*http.Cookie, error) {
+	user.Email = strings.ToLower(user.Email)
 	id, password, err := u.repo.GetUser(ctx, user.Email)
 	if err != nil {
 		return nil, err
@@ -71,10 +73,17 @@ func (u *UserUseCase) SetCookie(ctx context.Context, user *entity.User) (*http.C
 func (u *UserUseCase) IsCookieValid(ctx context.Context, token string) (string, error) {
 	userID, err := u.repo.GetUserIDbyCookie(ctx, token)
 	if err != nil {
-		log.Printf("error occured while checking cookie in usecase: %v", err)
 		return "", err
 	}
 	return userID, nil
+}
+
+func (u *UserUseCase) GetUserName(ctx context.Context, userID string) (string, error) {
+	username, err := u.repo.GetUserName(ctx, userID)
+	if err != nil {
+		return "", err
+	}
+	return username, nil
 }
 
 func generatePassword(password string) (string, error) {

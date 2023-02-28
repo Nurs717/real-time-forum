@@ -1,5 +1,5 @@
 import AbstractView from "./AbstractView.js";
-import {drawNavMenuLoggedIn, drawWelcomeUserName, drawNavMenuLoggedOut} from "./Shared.js";
+import {drawNavMenuLoggedIn, drawWelcomeUserName, drawNavMenuLoggedOut, getError500} from "./Shared.js";
 
 async function getPosts(url) {
     fetch(url.href, {
@@ -7,12 +7,16 @@ async function getPosts(url) {
         credentials: 'include'
     }).then(
         (response) => {
-            if (response.ok) {
+            if (response.status === 500) {
+                let app = document.getElementById("app");
+                app.innerHTML = getError500;
+                return
+            } else if (response.ok) {
                 // draw nav menu
                 drawNavMenuLoggedIn();
                 //draw username
                 drawWelcomeUserName();
-            } else {
+            } else if (response.status === 403) {
                 // draw nav menu logged out
                 drawNavMenuLoggedOut();
             }
@@ -28,9 +32,9 @@ async function getPosts(url) {
             let t_body = document.getElementById("tbody");
             if (document.cookie !== "") {
                 let username = document.getElementById('welcome_username');
-                username.innerHTML = data[0].username;
+                username.innerHTML = data.username;
             }
-            data.map(post => {
+            data.posts.map(post => {
                 let tr = document.createElement("tr");
                 if (post.ID % 2 === 0) {
                     tr.setAttribute('class', 'even');
@@ -46,7 +50,7 @@ async function getPosts(url) {
                 td_topic.appendChild(a_topic);
                 let td_categories = document.createElement("td");
                 let div_categories = document.createElement("div");
-                div_categories.innerText = "Sport, Religion";
+                div_categories.innerText = "Sport, Religion, programming";
                 td_categories.appendChild(div_categories);
                 let td_comments = document.createElement("td");
                 let div_comments = document.createElement("div");
@@ -151,7 +155,7 @@ export default class extends AbstractView {
     }
 
     async Init() {
-        let url = new URL("http://localhost:8080/");
+        let url = new URL("http://localhost:8080/posts");
         await getPosts(url);
 
         const button = document.getElementById("app");
