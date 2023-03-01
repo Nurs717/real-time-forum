@@ -39,7 +39,7 @@ func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		} else {
-			posts, err = h.UseCases.GetPostsByCategory(category)
+			posts, err = h.UseCases.GetPostsByCategory(r.Context(), category)
 			if err != nil {
 				log.Printf("Error occured in rest getPostsByCategory: %v\n", err)
 				return

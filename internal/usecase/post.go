@@ -3,7 +3,6 @@ package usecase
 import (
 	"context"
 	"fmt"
-	"log"
 	"rtforum/internal/cerror"
 	"rtforum/internal/entity"
 	"rtforum/internal/repository"
@@ -53,10 +52,9 @@ func (u *PostUseCase) GetAllPosts(ctx context.Context) ([]entity.Post, error) {
 	return posts, nil
 }
 
-func (u *PostUseCase) GetPostsByCategory(category string) ([]entity.Post, error) {
-	posts, err := u.repo.GetPostsByCategory(category)
+func (u *PostUseCase) GetPostsByCategory(ctx context.Context, category string) ([]entity.Post, error) {
+	posts, err := u.repo.GetPostsByCategory(ctx, category)
 	if err != nil {
-		log.Printf("Error occured in usecase getpostbycategory: %v", err)
 		return nil, err
 	}
 	return posts, nil

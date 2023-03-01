@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"rtforum/internal/cerror"
 	"rtforum/internal/entity"
 	"strings"
@@ -46,11 +47,12 @@ func (r *UsersRepo) GetUser(ctx context.Context, mail string) (string, string, e
 
 	var id string
 	var password string
-	rows, err := r.db.QueryContext(ctxWithTimeout, "SELECT ID, Password from Users WHERE Users.Mail = ?", mail)
+	rows, err := r.db.QueryContext(ctxWithTimeout, "SELECT ID, Password FROM Users WHERE Users.Mail = ?", mail)
 	if err != nil {
 		return "", "", cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "repo: getUser: query")
 	}
 	defer rows.Close()
+
 	for rows.Next() {
 		err := rows.Scan(&id, &password)
 		if err != nil {
@@ -60,6 +62,7 @@ func (r *UsersRepo) GetUser(ctx context.Context, mail string) (string, string, e
 	if err = rows.Err(); err != nil {
 		return "", "", cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "repo: getUser: catching rows error")
 	}
+	fmt.Println("repo", id, password)
 	return id, password, nil
 }
 
@@ -80,11 +83,12 @@ func (r *UsersRepo) GetUserIDbyCookie(ctx context.Context, token string) (string
 
 	var id string
 	rows, err := r.db.QueryContext(ctxWithTimeout,
-		"SELECT User_ID from Session WHERE Expired_Date > DATETIME('now') AND Session.Token = ?", token)
+		"SELECT User_ID FROM Session WHERE Expired_Date > DATETIME('now') AND Session.Token = ?", token)
 	if err != nil {
 		return "", cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "repo: GetUserIDbyCookie: Query")
 	}
 	defer rows.Close()
+
 	for rows.Next() {
 		err := rows.Scan(&id)
 		if err != nil {
@@ -101,11 +105,12 @@ func (r *UsersRepo) GetUserName(ctx context.Context, userID string) (string, err
 	ctxWithTimeout, cancel := context.WithTimeout(ctx, r.timeout)
 	defer cancel()
 
-	rows, err := r.db.QueryContext(ctxWithTimeout, "SELECT UserName from Users WHERE Users.ID = ?", userID)
+	rows, err := r.db.QueryContext(ctxWithTimeout, "SELECT UserName FROM Users WHERE Users.ID = ?", userID)
 	if err != nil {
 		return "", cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "repo: GetUserName: Query")
 	}
 	defer rows.Close()
+
 	var username string
 	for rows.Next() {
 		err = rows.Scan(&username)

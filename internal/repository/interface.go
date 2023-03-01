@@ -18,7 +18,7 @@ type Users interface {
 type Post interface {
 	CreatePost(post *entity.Post) error
 	GetAllPosts(ctx context.Context) ([]entity.Post, error)
-	GetPostsByCategory(category string) ([]entity.Post, error)
+	GetPostsByCategory(ctx context.Context, category string) ([]entity.Post, error)
 }
 
 type Comment interface {

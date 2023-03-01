@@ -50,7 +50,7 @@ async function getPosts(url) {
                 td_topic.appendChild(a_topic);
                 let td_categories = document.createElement("td");
                 let div_categories = document.createElement("div");
-                div_categories.innerText = "Sport, Religion, programming";
+                div_categories.innerText = `${post.category}`;
                 td_categories.appendChild(div_categories);
                 let td_comments = document.createElement("td");
                 let div_comments = document.createElement("div");
