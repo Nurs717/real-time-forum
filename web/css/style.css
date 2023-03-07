@@ -120,6 +120,7 @@ button.underline:hover:after {
 
 #app {
     height: max-content;
+    padding-bottom: 40px;
 }
 
 .posts {
@@ -173,10 +174,19 @@ tr.odd {
     background: #EFEFEF;
 }
 
-tbody {
+#tbody {
     font-size: 12px;
     text-align: center;
+    justify-content: center;
+    width: fit-content;
+    word-wrap: break-word;
 }
+
+.a_topic {
+    display: flex;
+    flex-direction: column;
+}
+
 
 
 /* post page */

@@ -8,6 +8,9 @@ import (
 // ErrEmptyRegisterData invalid entity
 const ErrEmptyRegisterData = "usecase: entity: Validate: missing required field"
 
+// ErrLengthOfUsername when registering username length more than 15
+const ErrLengthOfUsername = "usecase: entity: Validate: len of username more than 15"
+
 // ErrEmptyPost empty post
 var ErrEmptyPost = errors.New("the post is empty")
 

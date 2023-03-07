@@ -160,6 +160,8 @@ export default class extends AbstractView {
             if(usernameValue === '') {
                 setError(username, 'Username is required');
                 flag = false;
+            } else if (usernameValue.length > 15) {
+                setError(username, 'length must be no more than 15 character')
             } else {
                 setSuccess(username);
             }

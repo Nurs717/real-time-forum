@@ -19,9 +19,9 @@ func ConnectDB() (*sql.DB, error) {
 	}
 	tables := []string{
 		`PRAGMA foreign_keys = ON;`,
-		`CREATE TABLE IF NOT EXISTS Post (ID INTEGER PRIMARY KEY AUTOINCREMENT, Body TEXT, Title TEXT, User_ID TEXT, Date TEXT, Category TEXT);`,
-		`CREATE TABLE IF NOT EXISTS Category(Post_ID INTEGER, Category_Name TEXT, FOREIGN KEY(Post_ID)REFERENCES Post(ID), UNIQUE(Category_Name));`,
-		`CREATE TABLE IF NOT EXISTS Users (ID TEXT PRIMARY KEY, UserName TEXT, Age Text, Gender Text, First_Name TEXT, Last_Name TEXT, Mail TEXT, Password TEXT, UNIQUE(UserName), UNIQUE (Mail));`,
+		`CREATE TABLE IF NOT EXISTS Post (ID INTEGER PRIMARY KEY AUTOINCREMENT, Body TEXT, Title TEXT, User_ID TEXT, Date TEXT, CHECK(length(Title) <= 50));`,
+		`CREATE TABLE IF NOT EXISTS Category(Post_ID INTEGER, Category_Name TEXT NOT NULL, FOREIGN KEY(Post_ID)REFERENCES Post(ID), CHECK(length(trim(Category_Name)) > 0));`,
+		`CREATE TABLE IF NOT EXISTS Users (ID TEXT PRIMARY KEY, UserName TEXT, Age Text, Gender Text, First_Name TEXT, Last_Name TEXT, Mail TEXT, Password TEXT, UNIQUE(UserName), UNIQUE (Mail), CHECK(length(UserName) <= 15));`,
 		`CREATE TABLE IF NOT EXISTS Session (Token TEXT PRIMARY KEY, Expired_Date DATETIME, User_ID TEXT, FOREIGN KEY(User_ID)REFERENCES Users(ID));`,
 	}
 

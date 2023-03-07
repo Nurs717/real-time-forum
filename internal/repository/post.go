@@ -35,12 +35,10 @@ func (r *PostRepo) CreatePost(post *entity.Post) error {
 	}
 
 	for _, category := range post.Categories {
-		if category != "" {
-			_, err = r.db.Exec("INSERT INTO Category (Post_ID, Category_Name) VALUES (?, ?)", id, category)
-			if err != nil {
-				log.Printf("error occured adding post to db: %v", err)
-				return err
-			}
+		_, err = r.db.Exec("INSERT INTO Category (Post_ID, Category_Name) VALUES (?, ?)", id, category)
+		if err != nil {
+			log.Printf("error occured adding post to db: %v", err)
+			return err
 		}
 	}
 

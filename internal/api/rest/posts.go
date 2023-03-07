@@ -12,7 +12,7 @@ type ResponseGetPosts struct {
 	UserName string        `json:"username"`
 }
 
-func (h *Handler) MainPage(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Posts(w http.ResponseWriter, r *http.Request) {
 	//fmt.Println("id from middleware", r.Context().Value(CtxReqIdKey))
 	userID := fmt.Sprintf("%v", r.Context().Value(CtxReqIdKey))
 	statusCode := http.StatusOK

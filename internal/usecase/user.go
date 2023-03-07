@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"rtforum/internal/cerror"
 	"rtforum/internal/entity"
@@ -51,7 +50,6 @@ func (u *UserUseCase) SetCookie(ctx context.Context, user *entity.User) (*http.C
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(password)
 	hashedPassword := []byte(password)
 	passwordToCheck := []byte(user.Password)
 	if err := bcrypt.CompareHashAndPassword(hashedPassword, passwordToCheck); err != nil {

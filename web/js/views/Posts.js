@@ -34,7 +34,7 @@ async function getPosts(url) {
                 let username = document.getElementById('welcome_username');
                 username.innerHTML = data.username;
             }
-            data.posts.map(post => {
+            data?.posts?.map(post => {
                 let tr = document.createElement("tr");
                 if (post.ID % 2 === 0) {
                     tr.setAttribute('class', 'even');
@@ -44,13 +44,18 @@ async function getPosts(url) {
                 let td_topic = document.createElement("td");
                 td_topic.style.cssText = "padding-left: 25px; padding-right: 15px; text-align: justify;"
                 let a_topic = document.createElement("a");
+                a_topic.setAttribute("class", "a_topic")
                 a_topic.setAttribute("href", `http://localhost:8081/post/${post.ID}`);
                 a_topic.setAttribute("data-link", "")
                 a_topic.innerText = post.post_title;
                 td_topic.appendChild(a_topic);
                 let td_categories = document.createElement("td");
                 let div_categories = document.createElement("div");
-                div_categories.innerText = `${post.category}`;
+                let cat = '';
+                if  (post.category !== null || post.category !== 'undefined') {
+                    cat = post.category.join(", ");
+                }
+                div_categories.innerText = cat;
                 td_categories.appendChild(div_categories);
                 let td_comments = document.createElement("td");
                 let div_comments = document.createElement("div");
@@ -86,10 +91,15 @@ async function drawCategories() {
     let programming = document.createElement('button');
     programming.setAttribute('category-button', '');
     programming.setAttribute('value', 'programming');
-    programming.innerHTML = 'programming'
+    programming.innerHTML = 'programming';
+    let all = document.createElement('button');
+    all.setAttribute('category-button', '');
+    all.setAttribute('value', '');
+    all.innerHTML = 'all';
     categories.appendChild(sport);
     categories.appendChild(religion);
     categories.appendChild(programming);
+    categories.appendChild(all);
     row[1].appendChild(categories);
 }
 

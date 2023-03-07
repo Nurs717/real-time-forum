@@ -25,6 +25,8 @@ func (u *User) Validate() error {
 	if u.UserName == "" || u.Email == "" || u.Password == "" || u.FirstName == "" || u.LastName == "" ||
 		u.Age == "" || u.Gender == "" {
 		return cerror.NewErrorf(cerror.ErrorCodeInvalidArgument, cerror.DefaultType, cerror.ErrEmptyRegisterData)
+	} else if len(u.UserName) > 10 {
+		return cerror.NewErrorf(cerror.ErrorCodeInvalidArgument, cerror.DefaultType, cerror.ErrLengthOfUsername)
 	}
 	_, err := mail.ParseAddress(u.Email)
 	if err != nil {

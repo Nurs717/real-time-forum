@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"rtforum/internal/cerror"
 	"rtforum/internal/entity"
 	"strings"
@@ -62,7 +61,6 @@ func (r *UsersRepo) GetUser(ctx context.Context, mail string) (string, string, e
 	if err = rows.Err(); err != nil {
 		return "", "", cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "repo: getUser: catching rows error")
 	}
-	fmt.Println("repo", id, password)
 	return id, password, nil
 }
 
