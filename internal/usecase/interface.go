@@ -15,8 +15,7 @@ type Users interface {
 }
 
 type Post interface {
-	Validate(post *entity.Post) error
-	Create(post *entity.Post) error
+	Create(ctx context.Context, post *entity.Post) error
 	GetAllPosts(ctx context.Context) ([]entity.Post, error)
 	GetPostsByCategory(ctx context.Context, category string) ([]entity.Post, error)
 }
@@ -30,11 +29,11 @@ type UseCases struct {
 	Comments
 }
 
-type UseCaseDeps struct {
+type RepoUseCase struct {
 	Repo *repository.Repository
 }
 
-func NewUseCases(deps *UseCaseDeps) *UseCases {
+func NewUseCases(deps *RepoUseCase) *UseCases {
 	return &UseCases{
 		Users: NewUserUseCase(deps.Repo.Users),
 		Post:  NewPostUseCase(deps.Repo.Post),

@@ -46,7 +46,7 @@ export default class extends AbstractView {
     async Init() {
         const url = "http://localhost:8080/create-post"
 
-        var inputForm = document.getElementById("inputForm")
+        const inputForm = document.getElementById("inputForm")
 
         fetch(url, {
             mode: 'cors',
@@ -55,7 +55,7 @@ export default class extends AbstractView {
             console.log("creat post resp:", resp.status)
             if (resp.status == 401) {
                 window.history.pushState("", "", '/login');
-                var view = new Login;
+                let view = new Login;
                 document.querySelector("#app").innerHTML = await view.getHtml();
                 view.logIn();
                 return
@@ -68,10 +68,20 @@ export default class extends AbstractView {
             e.preventDefault()
 
             const formdata = new FormData(inputForm)
+            const body = JSON.stringify({
+                post_body: formdata.get("post_body"),
+                post_title: formdata.get("post_title"),
+                category: [
+                             formdata.get("sport") ?? null,
+                             formdata.get("religion") ?? null,
+                             formdata.get("programming") ?? null,
+                            ].filter(val => val !== null)
+            });
+
             fetch(url, {
                 credentials: 'include',
                 method: "POST",
-                body: JSON.stringify({ post_body: formdata.get("post_body"), post_title: formdata.get("post_title"), category: [formdata.get("sport"), formdata.get("religion"), formdata.get("programming")] }),
+                body: body,
             }).catch(
                 error => console.error(error)
             )
@@ -84,7 +94,7 @@ export default class extends AbstractView {
             e.preventDefault()
 
             function showCheckboxes() {
-                var checkboxes = document.getElementById("checkboxes");
+                const checkboxes = document.getElementById("checkboxes");
                 if (!expanded) {
                     checkboxes.style.display = "block";
                     expanded = true;

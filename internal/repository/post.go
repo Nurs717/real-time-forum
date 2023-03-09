@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"log"
 	"rtforum/internal/cerror"
 	"rtforum/internal/entity"
 	"time"
@@ -21,27 +20,26 @@ func NewPostRepo(db *sql.DB, timeout time.Duration) *PostRepo {
 	}
 }
 
-func (r *PostRepo) CreatePost(post *entity.Post) error {
-	postSQL, err := r.db.Exec("INSERT INTO Post (Body, Title, User_ID, Date) VALUES (?, ?, ?, ?)", post.Body, post.Title, post.UserID, post.PostDate)
+func (r *PostRepo) CreatePost(ctx context.Context, post *entity.Post) error {
+	ctxWithTimeout, cancel := context.WithTimeout(ctx, r.timeout)
+	defer cancel()
+
+	postSQL, err := r.db.ExecContext(ctxWithTimeout, "INSERT INTO Post (Body, Title, User_ID, Date) VALUES (?, ?, ?, ?)", post.Body, post.Title, post.UserID, post.PostDate)
 	if err != nil {
-		log.Printf("error occured adding post to db: %v", err)
-		return err
+		return cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "repo: CreatePost: Exec")
 	}
 
 	id, err := postSQL.LastInsertId()
 	if err != nil {
-		log.Printf("error ocured when getting id from sql result table post: %v", err)
-		return err
+		return cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "repo: CreatePost: LastInsertId")
 	}
 
 	for _, category := range post.Categories {
-		_, err = r.db.Exec("INSERT INTO Category (Post_ID, Category_Name) VALUES (?, ?)", id, category)
+		_, err = r.db.ExecContext(ctxWithTimeout, "INSERT INTO Category (Post_ID, Category_Name) VALUES (?, ?)", id, category)
 		if err != nil {
-			log.Printf("error occured adding post to db: %v", err)
-			return err
+			return cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "repo: CreatePost: Exec")
 		}
 	}
-
 	return nil
 }
 

@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 	"rtforum/internal/cerror"
 	"rtforum/internal/entity"
 	"rtforum/internal/repository"
@@ -19,27 +18,30 @@ func NewPostUseCase(repo repository.Post) *PostUseCase {
 	}
 }
 
-func (*PostUseCase) Validate(post *entity.Post) error {
-	if post == nil {
+func (*PostUseCase) validate(post *entity.Post) error {
+	if post == nil || post.Body == "" {
 		err := cerror.ErrEmptyPost
 		return err
 	}
-	if post.Body == "" {
-		err := cerror.ErrEmptyPost
-		return err
+	if len(post.Categories) < 1 {
+		return nil
+	}
+	if post.Title == "" || len(post.Title) > 50 {
+		return nil
 	}
 	return nil
 
 }
 
-func (u *PostUseCase) Create(post *entity.Post) error {
+func (u *PostUseCase) Create(ctx context.Context, post *entity.Post) error {
+	if err := u.validate(post); err != nil {
+		return err
+	}
 	date := time.Now().Format("2006-01-02 15:04:05")
 	post.PostDate = date
-	err := u.repo.CreatePost(post)
+	err := u.repo.CreatePost(ctx, post)
 	if err != nil {
-		fmt.Println("error occured usecase:", err)
 		return err
-
 	}
 	return nil
 }

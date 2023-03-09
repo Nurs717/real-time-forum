@@ -2,30 +2,29 @@ package rest
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"rtforum/internal/entity"
 )
 
-type ResponseGetPosts struct {
+type ResponsePosts struct {
 	Posts    []entity.Post `json:"posts"`
 	UserName string        `json:"username"`
 }
 
-func (h *Handler) Posts(w http.ResponseWriter, r *http.Request) {
-	//fmt.Println("id from middleware", r.Context().Value(CtxReqIdKey))
-	userID := fmt.Sprintf("%v", r.Context().Value(CtxReqIdKey))
-	statusCode := http.StatusOK
-	if userID == "Guest" {
-		statusCode = http.StatusForbidden
-	}
+func (h *Handler) posts(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	switch r.Method {
 	case "GET":
+		userID := fmt.Sprintf("%v", r.Context().Value(CtxReqIdKey))
+		statusCode := http.StatusOK
+		if userID == "Guest" {
+			statusCode = http.StatusForbidden
+		}
 		var posts []entity.Post
 		var err error
 		var username string
 		if userID != "Guest" {
-			username, err = h.UseCases.GetUserName(r.Context(), userID)
+			username, err = h.UseCases.Users.GetUserName(r.Context(), userID)
 			if err != nil {
 				renderErrorResponse(w, "can't get username", err)
 				return
@@ -41,11 +40,11 @@ func (h *Handler) Posts(w http.ResponseWriter, r *http.Request) {
 		} else {
 			posts, err = h.UseCases.GetPostsByCategory(r.Context(), category)
 			if err != nil {
-				log.Printf("Error occured in rest getPostsByCategory: %v\n", err)
+				renderErrorResponse(w, "can't get posts by category", err)
 				return
 			}
 		}
-		res := ResponseGetPosts{
+		res := ResponsePosts{
 			posts,
 			username,
 		}

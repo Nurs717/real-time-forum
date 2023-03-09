@@ -22,7 +22,7 @@ func main() {
 	}
 	defer db.Close()
 	repo := repository.NewRepository(db, time.Second*3)
-	deps := &usecase.UseCaseDeps{
+	deps := &usecase.RepoUseCase{
 		Repo: repo,
 	}
 	useCases := usecase.NewUseCases(deps)

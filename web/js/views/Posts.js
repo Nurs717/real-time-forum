@@ -7,6 +7,7 @@ async function getPosts(url) {
         credentials: 'include'
     }).then(
         (response) => {
+
             if (response.status === 500) {
                 let app = document.getElementById("app");
                 app.innerHTML = getError500;
@@ -24,13 +25,14 @@ async function getPosts(url) {
             drawCategories();
             //draw posts
             drawPosts();
-            return response.json()
+
+            return response.json().then(data => [data, response.status]);
         }
     ).then(
-        (data) => {
-            console.log('posts:', data);
+        ([data, status]) => {
             let t_body = document.getElementById("tbody");
-            if (document.cookie !== "") {
+            if (document.cookie !== "" && status === 200) {
+                console.log("username: ", data.username)
                 let username = document.getElementById('welcome_username');
                 username.innerHTML = data.username;
             }

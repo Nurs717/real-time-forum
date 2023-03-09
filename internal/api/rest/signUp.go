@@ -9,21 +9,21 @@ import (
 	"rtforum/internal/entity"
 )
 
-func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	switch r.Method {
 	case "POST":
 		var user *entity.User
 		data, err := io.ReadAll(r.Body)
 		if err != nil {
-			err = cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "rest: SignUp: read body req")
+			err = cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "rest: signUp: read body req")
 			renderErrorResponse(w, "internal error", err)
 			return
 		}
 
 		err = json.Unmarshal(data, &user)
 		if err != nil {
-			err = cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "rest: SignUp: unmarshal body")
+			err = cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "rest: signUp: unmarshal body")
 			renderErrorResponse(w, "internal error", err)
 			return
 		}

@@ -2,36 +2,39 @@ package rest
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
-	"log"
 	"net/http"
+	"rtforum/internal/cerror"
 	"rtforum/internal/entity"
 )
 
-func (h *Handler) CreatPost(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("create post rest:", r.Context().Value(CtxReqIdKey))
+func (h *Handler) creatPost(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 	if r.Context().Value(CtxReqIdKey) == "Guest" {
-		w.WriteHeader(http.StatusUnauthorized)
+		renderResponse(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
 	switch r.Method {
 	case "POST":
 		var post *entity.Post
 		data, err := io.ReadAll(r.Body)
-		defer r.Body.Close()
 		if err != nil {
-			log.Printf("error reading body %v\n", err)
+			err = cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "rest: CreatePost: reading body")
+			renderErrorResponse(w, "internal error", err)
+			return
 		}
 		err = json.Unmarshal(data, &post)
 		if err != nil {
-			log.Printf("error unmarshaling %v\n", err)
+			err = cerror.WrapErrorf(err, cerror.ErrorCodeInternal, cerror.DefaultType, "rest: creatPost: unmarshal error")
+			renderErrorResponse(w, "internal error", err)
+			return
 		}
 		post.UserID = r.Context().Value(CtxReqIdKey).(string)
-		err = h.UseCases.Post.Create(post)
+		err = h.UseCases.Post.Create(r.Context(), post)
 		if err != nil {
-			log.Printf("error adding post in rest: %v\n", err)
+			renderErrorResponse(w, "unable to create post", err)
+			return
 		}
-		fmt.Println("post from client:", post)
+		renderResponse(w, "post created", http.StatusCreated)
 	}
 }
