@@ -15,7 +15,7 @@ func (h *Handler) posts(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	switch r.Method {
 	case "GET":
-		userID := fmt.Sprintf("%v", r.Context().Value(CtxReqIdKey))
+		userID := fmt.Sprintf("%v", r.Context().Value(CtxReqUserIdKey))
 		statusCode := http.StatusOK
 		if userID == "Guest" {
 			statusCode = http.StatusForbidden
@@ -24,11 +24,7 @@ func (h *Handler) posts(w http.ResponseWriter, r *http.Request) {
 		var err error
 		var username string
 		if userID != "Guest" {
-			username, err = h.UseCases.Users.GetUserName(r.Context(), userID)
-			if err != nil {
-				renderErrorResponse(w, "can't get username", err)
-				return
-			}
+			username = r.Context().Value(CtxReqUsernameKey).(string)
 		}
 		category := r.FormValue("category")
 		if category == "" {

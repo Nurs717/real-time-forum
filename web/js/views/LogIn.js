@@ -55,7 +55,7 @@ export default class extends AbstractView {
     }
 
     async Init() {
-        await this.drawNavMenuLoggedOut()
+        await this.drawNavMenuLoggedOut();
         await logIn();
     }
 }

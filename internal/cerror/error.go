@@ -12,7 +12,11 @@ const ErrEmptyRegisterData = "usecase: entity: Validate: missing required field"
 const ErrLengthOfUsername = "usecase: entity: Validate: len of username more than 15"
 
 // ErrEmptyPost empty post
-var ErrEmptyPost = errors.New("the post is empty")
+const ErrEmptyPost = "the post is empty"
+
+const ErrNoCategory = "need to choose at least 1 category"
+
+const ErrEmptyTitleOrOutOfLen = "the title is empty or length of title more than 50"
 
 // ErrInvalidPassword missing required letter when registering
 const ErrInvalidPassword = "usecase: entity: Validate: invalid password, missing Upper, Lower or Number letter, or length less than 8"

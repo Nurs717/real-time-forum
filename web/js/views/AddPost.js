@@ -1,5 +1,6 @@
 import AbstractView from "./AbstractView.js";
 import Login from "./LogIn.js";
+import {drawNavMenuLoggedIn, drawWelcomeUserName, getError500} from "./Shared.js";
 
 export default class extends AbstractView {
     constructor() {
@@ -9,41 +10,29 @@ export default class extends AbstractView {
 
     async getHtml() {
         return `
-        <h1>Creat Post</h1>
-        <form id="inputForm" onSubmit="return false;">
-       
-        <div class="multiselect">
-        <div id="click" class="selectBox">
-        <select>
-        <option>Categories</option>
-        </select>
-        <div class="overSelect"></div>
+        <header id="top">
+            <div class="row">
+                <div class="column lpad">
+                    <div class="logo">
+                        <a href="http://localhost:8081/" data-link>MyForum</a>
+                    </div>
+                </div>
+                <div class="column ar lpad">
+                    <nav class="menu">
+                        <a href="/" id="h_posts" class="current nav_link" data-link>Posts</a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <div class="row">
         </div>
-        <div id="checkboxes">
-        <label for="one">
-        <input type="checkbox" name="sport" id="sport" value="sport" />Sport</label>
-        <label for="two">
-        <input type="checkbox" name="religion" id="religion" value="religion" />Religion</label>
-        <label for="three">
-        <input type="checkbox" name="programming" id="programming" value="programming" />Programming</label>
-        </div>
-        </div>
-
-        <div>
-        <label for="post_body">Title</label>
-        <input id="title" name="post_title" type="text">
-        </div>
-
-        <div>
-        <label for="post_body">Post</label>
-        <input id="post" name="post_body" value="hello!!" type="text">
-        </div>
-        <button type="submit" style="width:100px;">Create Post</button>
-        </form>
         `;
     }
 
     async Init() {
+
+        await this.drawAddPostForm()
+
         const url = "http://localhost:8080/create-post"
 
         const inputForm = document.getElementById("inputForm")
@@ -53,11 +42,12 @@ export default class extends AbstractView {
             credentials: 'include'
         }).then(async(resp) => {
             console.log("creat post resp:", resp.status)
-            if (resp.status == 401) {
+            if (resp.status === 401) {
                 window.history.pushState("", "", '/login');
                 let view = new Login;
                 document.querySelector("#app").innerHTML = await view.getHtml();
-                view.logIn();
+                await view.drawNavMenuLoggedOut();
+                await view.logIn();
                 return
             }
         })
@@ -106,4 +96,50 @@ export default class extends AbstractView {
             showCheckboxes();
         });
     }
+
+    async drawAddPostForm() {
+        await drawNavMenuLoggedIn();
+
+        let app = document.getElementById("app");
+        let body_container = document.createElement("div");
+        body_container.id = "create-post";
+        body_container.className = "create-post";
+        app.appendChild(body_container);
+        body_container.innerHTML = addPostHTML;
+    }
 }
+
+const addPostHTML =
+    `
+        <h1>Creat Post</h1>
+        <form id="inputForm" onSubmit="return false;">
+
+        <div class="multiselect">
+        <div id="click" class="selectBox">
+        <select>
+        <option>Categories</option>
+        </select>
+        <div class="overSelect"></div>
+        </div>
+        <div id="checkboxes">
+        <label for="one">
+        <input type="checkbox" name="sport" id="sport" value="sport" />Sport</label>
+        <label for="two">
+        <input type="checkbox" name="religion" id="religion" value="religion" />Religion</label>
+        <label for="three">
+        <input type="checkbox" name="programming" id="programming" value="programming" />Programming</label>
+        </div>
+        </div>
+
+        <div>
+        <label for="post_body">Title</label>
+        <input id="title" name="post_title" type="text">
+        </div>
+
+        <div>
+        <label for="post_body">Post</label>
+        <input id="post" name="post_body" value="hello!!" type="text">
+        </div>
+        <button type="submit" style="width:100px;">Create Post</button>
+        </form>
+    `

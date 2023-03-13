@@ -10,7 +10,7 @@ import (
 
 func (h *Handler) creatPost(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	if r.Context().Value(CtxReqIdKey) == "Guest" {
+	if r.Context().Value(CtxReqUserIdKey) == "Guest" {
 		renderResponse(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
@@ -29,7 +29,7 @@ func (h *Handler) creatPost(w http.ResponseWriter, r *http.Request) {
 			renderErrorResponse(w, "internal error", err)
 			return
 		}
-		post.UserID = r.Context().Value(CtxReqIdKey).(string)
+		post.UserID = r.Context().Value(CtxReqUserIdKey).(string)
 		err = h.UseCases.Post.Create(r.Context(), post)
 		if err != nil {
 			renderErrorResponse(w, "unable to create post", err)

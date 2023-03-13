@@ -2,7 +2,6 @@ package rest
 
 import (
 	"context"
-	"log"
 	"net/http"
 )
 
@@ -17,28 +16,35 @@ func enableCORS(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-type CtxKey string
+type CtxUserIdKey string
+type CtxUsernameKey string
 
 const (
-	CtxReqIdKey CtxKey = "X-Request-Id"
-	//CtxReqUsernameKey CtxUsernameKey = "X-Request-Username"
+	CtxReqUserIdKey   CtxUserIdKey   = "X-Request-Id"
+	CtxReqUsernameKey CtxUsernameKey = "X-Request-Username"
 )
 
 func (h *Handler) checkCookie(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("session")
-		CtxKey := "Guest"
+		userIdKey := "Guest"
+		usernameKey := ""
 		if err == nil {
 			userID, err := h.UseCases.Users.IsCookieValid(r.Context(), cookie.Value)
 			if err != nil {
-				log.Printf("middleware: checkCookie: r.Cookie: %v", err.Error())
+				renderErrorResponse(w, "middleware error", err)
 			}
 			if userID != "" {
-				CtxKey = userID
+				userIdKey = userID
+				usernameKey, err = h.UseCases.Users.GetUserName(r.Context(), userID)
+				if err != nil {
+					renderErrorResponse(w, "middleware error", err)
+				}
 			}
 		}
 
-		ctx1 := context.WithValue(r.Context(), CtxReqIdKey, CtxKey)
+		ctx1 := context.WithValue(r.Context(), CtxReqUserIdKey, userIdKey)
+		ctx1 = context.WithValue(ctx1, CtxReqUsernameKey, usernameKey)
 		ctx2 := r.WithContext(ctx1)
 
 		next.ServeHTTP(w, ctx2)

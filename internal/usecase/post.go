@@ -20,14 +20,13 @@ func NewPostUseCase(repo repository.Post) *PostUseCase {
 
 func (*PostUseCase) validate(post *entity.Post) error {
 	if post == nil || post.Body == "" {
-		err := cerror.ErrEmptyPost
-		return err
+		return cerror.NewErrorf(cerror.ErrorCodeInvalidArgument, cerror.DefaultType, cerror.ErrEmptyPost)
 	}
 	if len(post.Categories) < 1 {
-		return nil
+		return cerror.NewErrorf(cerror.ErrorCodeInvalidArgument, cerror.DefaultType, cerror.ErrNoCategory)
 	}
 	if post.Title == "" || len(post.Title) > 50 {
-		return nil
+		return cerror.NewErrorf(cerror.ErrorCodeInvalidArgument, cerror.DefaultType, cerror.ErrEmptyTitleOrOutOfLen)
 	}
 	return nil
 

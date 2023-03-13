@@ -12,7 +12,7 @@ func (h *Handler) logIn(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	switch r.Method {
 	case "GET":
-		if r.Context().Value(CtxReqIdKey) != "Guest" {
+		if r.Context().Value(CtxReqUserIdKey) != "Guest" {
 			renderResponse(w, "allowed", http.StatusAccepted)
 			return
 		}

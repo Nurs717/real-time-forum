@@ -29,18 +29,18 @@ export default class extends AbstractView {
     }
 
     async Init() {
-        await this.drawSignUpForm()
+        await this.drawSignUpForm();
         await this.signUp();
     }
 
     async drawSignUpForm() {
         await this.drawNavMenuLoggedOut()
         let app = document.getElementById("app");
-        let body_container = document.createElement("div")
-        body_container.id = "sign-up"
-        body_container.className = "sign-up"
-        app.appendChild(body_container)
-        body_container.innerHTML = regHTML
+        let body_container = document.createElement("div");
+        body_container.id = "sign-up";
+        body_container.className = "sign-up";
+        app.appendChild(body_container);
+        body_container.innerHTML = regHTML;
     }
 
     async drawNavMenuLoggedOut() {
@@ -53,7 +53,7 @@ export default class extends AbstractView {
     }
 
     async signUp() {
-        const url = "http://localhost:8080/signup"
+        const url = "http://localhost:8080/signup";
 
         const form = document.getElementById('sign-up-form');
         const username = document.getElementById('username');
@@ -71,7 +71,7 @@ export default class extends AbstractView {
             e.preventDefault();
 
             if (validateInputs()) {
-                const formdata = new FormData(form)
+                const formdata = new FormData(form);
                 fetch(url, {
                     method: "POST",
                     headers: {
@@ -84,7 +84,8 @@ export default class extends AbstractView {
                         firstname: formdata.get("firstname"),
                         lastname: formdata.get("lastname"),
                         email: formdata.get("email"),
-                        password: formdata.get("password") }),
+                        password: formdata.get("password")
+                    }),
                 })
                     .then(
                         (response) => {

@@ -25,7 +25,6 @@ const navigateTo = url => {
 }
 
 const router = async() => {
-    // console.log("sdsd", pathToRegex("/posts/[0-9]+"))
     const routes = [
         { path: "/", view: MainPage },
         { path: "/create-post", view: AddPost },
@@ -46,11 +45,11 @@ const router = async() => {
 
     if (!match) {
         console.log("match2:", match);
-        match = {
-            route: routes[0],
-            result: [location.pathname]
-
-        };
+        // match = {
+        //     route: routes[0],
+        //     result: [location.pathname]
+        //
+        // };
 
         document.querySelector("#app").innerHTML = getError404;
         return
