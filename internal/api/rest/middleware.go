@@ -2,7 +2,9 @@ package rest
 
 import (
 	"context"
+	"log"
 	"net/http"
+	"time"
 )
 
 func enableCORS(next http.HandlerFunc) http.HandlerFunc {
@@ -11,7 +13,7 @@ func enableCORS(next http.HandlerFunc) http.HandlerFunc {
 		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Set-Cookie")
+		w.Header().Set("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Set-Cookie")
 		next.ServeHTTP(w, r)
 	}
 }
@@ -48,5 +50,14 @@ func (h *Handler) checkCookie(next http.HandlerFunc) http.HandlerFunc {
 		ctx2 := r.WithContext(ctx1)
 
 		next.ServeHTTP(w, ctx2)
+	}
+}
+
+func (h *Handler) reqLogger(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer func(start time.Time) {
+			log.Printf("%v, %v, %v", r.Method, r.URL.Path, time.Since(start))
+		}(time.Now())
+		next.ServeHTTP(w, r)
 	}
 }

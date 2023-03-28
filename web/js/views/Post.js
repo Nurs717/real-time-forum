@@ -30,8 +30,7 @@ export default class extends AbstractView {
 
     async Init() {
         let id = window.location.pathname.replace("/post/", "");
-        let url = new URL(`http://localhost:8080/post/${id}`);
-        console.log("post worked", url.href)
+        let url = new URL(`http://localhost:8080/post?id=${id}`);
         await getPostPage(url.href);
     }
 }
@@ -63,7 +62,7 @@ async function getPostPage(url) {
             }
             //draw comments container
             drawCommentsContainer();
-            return response.json()
+            // return response.json()
         }
     )
 }

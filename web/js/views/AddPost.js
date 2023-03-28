@@ -47,7 +47,7 @@ export default class extends AbstractView {
                 let view = new Login;
                 document.querySelector("#app").innerHTML = await view.getHtml();
                 await view.drawNavMenuLoggedOut();
-                await view.logIn();
+                await view.Init();
                 return
             }
         })
@@ -76,25 +76,25 @@ export default class extends AbstractView {
                 error => console.error(error)
             )
         })
-
-        let expanded = false;
-
-        document.getElementById("click").addEventListener("click", (e) => {
-
-            e.preventDefault()
-
-            function showCheckboxes() {
-                const checkboxes = document.getElementById("checkboxes");
-                if (!expanded) {
-                    checkboxes.style.display = "block";
-                    expanded = true;
-                } else {
-                    checkboxes.style.display = "none";
-                    expanded = false;
-                }
-            }
-            showCheckboxes();
-        });
+        //
+        // let expanded = false;
+        //
+        // document.getElementById("click").addEventListener("click", (e) => {
+        //
+        //     e.preventDefault()
+        //
+        //     function showCheckboxes() {
+        //         const checkboxes = document.getElementById("checkboxes");
+        //         if (!expanded) {
+        //             checkboxes.style.display = "block";
+        //             expanded = true;
+        //         } else {
+        //             checkboxes.style.display = "none";
+        //             expanded = false;
+        //         }
+        //     }
+        //     showCheckboxes();
+        // });
     }
 
     async drawAddPostForm() {
@@ -115,13 +115,14 @@ const addPostHTML =
         <form id="inputForm" onSubmit="return false;">
 
         <div class="multiselect">
-        <div id="click" class="selectBox">
-        <select>
-        <option>Categories</option>
-        </select>
-        <div class="overSelect"></div>
-        </div>
+<!--        <div id="click" class="selectBox">-->
+<!--        <select>-->
+<!--        <option>Categories</option>-->
+<!--        </select>-->
+<!--        <div class="overSelect"></div>-->
+<!--        </div>-->
         <div id="checkboxes">
+        <div class="category">Categories</div>
         <label for="one">
         <input type="checkbox" name="sport" id="sport" value="sport" />Sport</label>
         <label for="two">

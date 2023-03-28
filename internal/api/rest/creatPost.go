@@ -32,9 +32,9 @@ func (h *Handler) creatPost(w http.ResponseWriter, r *http.Request) {
 		post.UserID = r.Context().Value(CtxReqUserIdKey).(string)
 		err = h.UseCases.Post.Create(r.Context(), post)
 		if err != nil {
-			renderErrorResponse(w, "unable to create post", err)
+			renderErrorResponse(w, "unable to create creatPost", err)
 			return
 		}
-		renderResponse(w, "post created", http.StatusCreated)
+		renderResponse(w, "creatPost created", http.StatusCreated)
 	}
 }
